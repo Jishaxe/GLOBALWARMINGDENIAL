@@ -2,6 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+/* ISSUES
+ * Getting collisions working
+ * Solved by: switching to a different collision technique and experimenting
+ */
 namespace GLOBALWARMINGDENIAL
 {
     /// <summary>
@@ -57,6 +61,7 @@ namespace GLOBALWARMINGDENIAL
             mouse = Mouse.GetState();
             keyboard = Keyboard.GetState();
 
+            if (keyboard.IsKeyDown(Keys.Space)) player.position = new Vector2(100, 20);
             player.HandleInput(mouse, keyboard);
 
             // If mouse is clicked, dig out the specified tile
@@ -69,6 +74,7 @@ namespace GLOBALWARMINGDENIAL
 
             player.Update();
             player.CollideWithWorld(world);
+
             base.Update(gameTime);
         }
 

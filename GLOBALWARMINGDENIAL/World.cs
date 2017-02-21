@@ -14,7 +14,7 @@ namespace GLOBALWARMINGDENIAL
         public const int TILE_SIZE = 100;
 
         public Texture2D dirt;
-        List<Tile> tiles = new List<Tile>();
+        public List<Tile> tiles = new List<Tile>();
         GlobalWarmingDenial game;
 
         public World (GlobalWarmingDenial game)
@@ -33,7 +33,7 @@ namespace GLOBALWARMINGDENIAL
             // For the moment, just fill up the whole screen with dirt
             for (int x = 0; x < width; x += TILE_SIZE)
             {
-                for (int y = 100; y < height; y += TILE_SIZE)
+                for (int y = 250; y < height; y += TILE_SIZE)
                 {
                     Tile tile = new Tile();
                     tile.position = new Vector2(x, y);
@@ -65,17 +65,14 @@ namespace GLOBALWARMINGDENIAL
         {
             List<Tile> results = new List<Tile>();
 
-            Tile left = this.GetTile(position + new Vector2(0, -radius));
-            if (left != null) results.Add(left);
+            // Return every tile which of center point is within the radius
+            foreach (Tile tile in tiles)
+            {
+                Vector2 centerOfTile = new Vector2(tile.position.X + TILE_SIZE / 2, tile.position.Y + TILE_SIZE / 2);
+                Vector2 vectorToTarget = centerOfTile - position;
 
-            Tile right = this.GetTile(position + new Vector2(0, radius));
-            if (right != null) results.Add(right);
-
-            Tile up = this.GetTile(position + new Vector2(-radius, 0));
-            if (up != null) results.Add(up);
-
-            Tile down = this.GetTile(position + new Vector2(radius, 0));
-            if (down != null) results.Add(down);
+                if (vectorToTarget.Length() <= radius) results.Add(tile);
+            }
 
             return results;
         }
