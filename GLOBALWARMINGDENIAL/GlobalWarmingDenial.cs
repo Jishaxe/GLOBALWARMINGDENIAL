@@ -7,13 +7,14 @@ namespace GLOBALWARMINGDENIAL
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class GlobalWarmingDenial : Game
     {
-        GraphicsDeviceManager graphics;
+        public GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Player player;
+        World world;
 
-        public Game1()
+        public GlobalWarmingDenial()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -23,14 +24,20 @@ namespace GLOBALWARMINGDENIAL
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
             graphics.ApplyChanges();
+            IsMouseVisible = true;
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
+            world = new World(this);
+            world.dirt = Content.Load<Texture2D>("dirt");
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
             player = new Player();
             player.texture = Content.Load<Texture2D>("player");
+
+            world.Build();
         }
 
         protected override void UnloadContent()
@@ -44,6 +51,14 @@ namespace GLOBALWARMINGDENIAL
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            // If mouse is clicked, dig out the specified tile
+            MouseState mouse = Mouse.GetState();
+            if (mouse.LeftButton == ButtonState.Pressed)
+            {
+                Tile tile = world.GetTile(mouse.Position.ToVector2());
+                if (tile != null) tile.IsDug = true;
+            }
+
             base.Update(gameTime);
         }
 
@@ -53,6 +68,7 @@ namespace GLOBALWARMINGDENIAL
 
             spriteBatch.Begin();
             player.Draw(spriteBatch);
+            world.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
