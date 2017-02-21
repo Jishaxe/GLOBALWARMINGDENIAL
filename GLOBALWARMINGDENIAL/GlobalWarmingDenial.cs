@@ -13,6 +13,8 @@ namespace GLOBALWARMINGDENIAL
         SpriteBatch spriteBatch;
         Player player;
         World world;
+        MouseState mouse;
+        KeyboardState keyboard;
 
         public GlobalWarmingDenial()
         {
@@ -35,7 +37,7 @@ namespace GLOBALWARMINGDENIAL
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
             player = new Player();
-            player.texture = Content.Load<Texture2D>("player");
+            player.texture = Content.Load<Texture2D>("drill");
 
             world.Build();
         }
@@ -51,14 +53,22 @@ namespace GLOBALWARMINGDENIAL
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            // Update the current state of the mouse and keyboard
+            mouse = Mouse.GetState();
+            keyboard = Keyboard.GetState();
+
+            player.HandleInput(mouse, keyboard);
+
             // If mouse is clicked, dig out the specified tile
-            MouseState mouse = Mouse.GetState();
+
             if (mouse.LeftButton == ButtonState.Pressed)
             {
                 Tile tile = world.GetTile(mouse.Position.ToVector2());
                 if (tile != null) tile.IsDug = true;
             }
 
+            player.Update();
+            player.CollideWithWorld(world);
             base.Update(gameTime);
         }
 
@@ -67,8 +77,8 @@ namespace GLOBALWARMINGDENIAL
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-            player.Draw(spriteBatch);
             world.Draw(spriteBatch);
+            player.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

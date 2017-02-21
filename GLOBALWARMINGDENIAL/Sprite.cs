@@ -12,6 +12,8 @@ namespace GLOBALWARMINGDENIAL
     class Sprite
     {
         public Vector2 position = new Vector2();
+        public Vector2 velocity;
+        public float drag = 0.8f;
         public Texture2D texture;
         
         public void Draw (SpriteBatch batch)
@@ -19,9 +21,16 @@ namespace GLOBALWARMINGDENIAL
             batch.Draw(texture, position, Color.White);
         }
 
-        public void Update ()
+        // Produce a hitbox of this player
+        public Rectangle GetHitbox()
         {
+            return new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
+        }
 
+        public virtual void Update ()
+        {
+            position += velocity;
+            velocity *= drag;
         }
     }
 }

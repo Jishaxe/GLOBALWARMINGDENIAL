@@ -60,6 +60,26 @@ namespace GLOBALWARMINGDENIAL
             return result;
         }
 
+        // Get the tiles surrounding a point
+        public List<Tile> GetTilesAround(Vector2 position, int radius)
+        {
+            List<Tile> results = new List<Tile>();
+
+            Tile left = this.GetTile(position + new Vector2(0, -radius));
+            if (left != null) results.Add(left);
+
+            Tile right = this.GetTile(position + new Vector2(0, radius));
+            if (right != null) results.Add(right);
+
+            Tile up = this.GetTile(position + new Vector2(-radius, 0));
+            if (up != null) results.Add(up);
+
+            Tile down = this.GetTile(position + new Vector2(radius, 0));
+            if (down != null) results.Add(down);
+
+            return results;
+        }
+
         public void Draw (SpriteBatch batch)
         {
             foreach (Tile tile in tiles)
