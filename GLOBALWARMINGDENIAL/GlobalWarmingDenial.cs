@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 /* ISSUES
  * Getting collisions working
  * Solved by: switching to a different collision technique and experimenting
+ * Needed to compensate for gravity for some fucking reason
  */
 namespace GLOBALWARMINGDENIAL
 {

@@ -18,15 +18,15 @@ namespace GLOBALWARMINGDENIAL
 
         public void HandleInput(MouseState mouse, KeyboardState keyboard)
         {
-            if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.Left)) velocity.X -= 1;
-            if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right)) velocity.X += 1;
-            if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down)) velocity.Y += 1;         
+            if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.Left)) velocity.X -= 0.5f;
+            if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right)) velocity.X += 0.5f;
+            if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down)) velocity.Y += 0.5f;         
         }
 
         public override void Update ()
         { 
             // Gravity
-            //velocity.Y += 0.6f;
+            velocity.Y += 0.6f;
 
             base.Update();
         }
@@ -51,7 +51,7 @@ namespace GLOBALWARMINGDENIAL
                 if (playerHb.Intersects(tileHb))
                 {
                     // Hit from top
-                    if (previousHitbox.Bottom <= tileHb.Top)
+                    if (previousHitbox.Bottom <= tileHb.Top + 1)
                     {
                         position.Y = tileHb.Y - playerHb.Height - velocity.Y;
                         //velocity.Y = -velocity.Y;
