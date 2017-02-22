@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace GLOBALWARMINGDENIAL
     {
         public Rectangle previousHitbox = new Rectangle();
 
-        public Player ()
+        public Player(GlobalWarmingDenial game) : base(game)
         {
         }
 

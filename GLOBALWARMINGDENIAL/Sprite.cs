@@ -14,11 +14,17 @@ namespace GLOBALWARMINGDENIAL
         public Vector2 position = new Vector2();
         public Vector2 velocity;
         public float drag = 0.8f;
+        public GlobalWarmingDenial game;
         public Texture2D texture;
         
-        public void Draw (SpriteBatch batch)
+        public Sprite (GlobalWarmingDenial game)
         {
-            batch.Draw(texture, position, Color.White);
+            this.game = game;
+        }
+
+        public virtual void Draw (SpriteBatch batch)
+        {
+            batch.Draw(texture, position + game.camera, Color.White);
         }
 
         // Produce a hitbox of this player
