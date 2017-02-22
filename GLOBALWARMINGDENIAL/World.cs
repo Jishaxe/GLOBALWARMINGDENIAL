@@ -38,12 +38,25 @@ namespace GLOBALWARMINGDENIAL
             // For the moment, just fill up the whole screen with dirt
             for (int x = 0; x < width; x += TILE_SIZE)
             {
-                for (int y = 0; y < height; y += TILE_SIZE)
+                for (int y = 0; y < 5000; y += TILE_SIZE)
                 {
                     Tile tile = new Tile(game, this);
                     tile.position = new Vector2(x, y);
                     if (y < 250) tile.IsDug = true;
                     tiles.Add(tile);
+                }
+            }
+        }
+
+        public void Update ()
+        {
+            List<Tile> tileCopy = new List<Tile>(tiles);
+            // Prune tiles that have left the screen
+            foreach (Tile tile in tileCopy)
+            {
+                if ((game.camera.Y - tile.position.Y) > 100)
+                {
+                    tiles.Remove(tile);
                 }
             }
         }

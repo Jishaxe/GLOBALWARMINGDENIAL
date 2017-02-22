@@ -23,7 +23,7 @@ namespace GLOBALWARMINGDENIAL
             if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.Left)) DigInDirection(TileDirection.LEFT);
             if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right)) DigInDirection(TileDirection.RIGHT);
             if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down)) DigInDirection(TileDirection.DOWN);
-            if (keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.Up)) velocity.Y -= 1.5f;
+            if (keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.Up)) velocity.Y -= 4f;
         }
 
         // Makes the player dig in a direction
@@ -64,7 +64,7 @@ namespace GLOBALWARMINGDENIAL
                 Digging.timeLeft--;
 
                 // Move the player to the center of the target
-                Vector2 moveBy = (this.GetCenter() - Digging.moveTarget) / 50;
+                Vector2 moveBy = (this.GetCenter() - Digging.moveTarget) / 20;
                 velocity -= moveBy;
 
                 if (Digging.timeLeft == 0)

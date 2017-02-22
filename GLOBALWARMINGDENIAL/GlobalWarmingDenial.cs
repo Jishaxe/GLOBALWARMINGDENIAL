@@ -83,6 +83,8 @@ namespace GLOBALWARMINGDENIAL
 
             float centerOfScreen = GraphicsDevice.Viewport.Height / 2;
             camera.Y += (centerOfScreen - camera.Y - player.position.Y) / 50;
+
+            world.Update();
             base.Update(gameTime);
         }
 
