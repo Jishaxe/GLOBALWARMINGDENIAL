@@ -70,7 +70,7 @@ namespace GLOBALWARMINGDENIAL
 
             if (mouse.LeftButton == ButtonState.Pressed)
             {
-                Tile tile = world.GetTile(mouse.Position.ToVector2());
+                Tile tile = world.GetTile(mouse.Position.ToVector2() - camera);
                 if (tile != null) tile.IsDug = true;
             }
 

@@ -35,7 +35,7 @@ namespace GLOBALWARMINGDENIAL
             {
                 for (int y = 250; y < height; y += TILE_SIZE)
                 {
-                    Tile tile = new Tile(game);
+                    Tile tile = new Tile(game, this);
                     tile.position = new Vector2(x, y);
                     tiles.Add(tile);
                 }
