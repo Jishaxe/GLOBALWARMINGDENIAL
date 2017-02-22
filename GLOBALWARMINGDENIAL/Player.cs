@@ -12,6 +12,7 @@ namespace GLOBALWARMINGDENIAL
     class Player: Sprite
     {
         public Rectangle previousHitbox = new Rectangle();
+        public DiggingState Digging = new DiggingState();
 
         public Player(GlobalWarmingDenial game) : base(game)
         {
@@ -19,17 +20,62 @@ namespace GLOBALWARMINGDENIAL
 
         public void HandleInput(MouseState mouse, KeyboardState keyboard)
         {
-            if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.Left)) velocity.X -= 1f;
-            if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right)) velocity.X += 1f;
-            if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down)) velocity.Y += 0.5f;
+            if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.Left)) DigInDirection(TileDirection.LEFT);
+            if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right)) DigInDirection(TileDirection.RIGHT);
+            if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down)) DigInDirection(TileDirection.DOWN);
             if (keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.Up)) velocity.Y -= 1.5f;
+        }
+
+        // Makes the player dig in a direction
+        public void DigInDirection(TileDirection direction)
+        {
+            if (Digging.IsDigging) return; // Cancel if already digging
+
+            Tile currentTile = game.world.GetTile(position);
+
+            if (currentTile == null) return; // Cancel if there is no tile for the player
+
+            Tile tile = currentTile.GetTileInDirection(direction);
+
+            if (tile == null) return; // Cancel if there is no tile below
+
+            // Only dig if there is not a dug tile already
+            if (!tile.IsDug)
+            {
+                // Set up the digging state to begin the digging
+                Digging.IsDigging = true;
+                Digging.diggingTarget = tile;
+                Digging.moveTarget = new Vector2(tile.position.X + World.TILE_SIZE / 2, tile.position.Y + World.TILE_SIZE / 2);
+                Digging.timeLeft = 15;
+            }
+            else if (direction == TileDirection.LEFT) velocity.X -= 3f; // Instead move left and right if there are no tiles on those sides
+            else if (direction == TileDirection.RIGHT) velocity.X += 3f;
         }
 
         public override void Update ()
         { 
             // Gravity
-            velocity.Y += 0.6f;
+            velocity.Y += 1.1f;
 
+            // Make it dig
+            if (Digging.IsDigging)
+            {
+                // Reduce the time left on this dig
+                Digging.timeLeft--;
+
+                // Move the player to the center of the target
+                Vector2 moveBy = (this.GetCenter() - Digging.moveTarget) / 50;
+                velocity -= moveBy;
+
+                if (Digging.timeLeft == 0)
+                {
+                    // Digging has finished
+                    Digging.IsDigging = false;
+                    Digging.diggingTarget.IsDug = true;
+                }
+            }
+
+            // Bound the player within the walls
             if (position.X < 0) position.X = 0;
             if (position.X + texture.Width > game.GraphicsDevice.Viewport.Width) position.X = game.GraphicsDevice.Viewport.Width - texture.Width;
             base.Update();
@@ -53,32 +99,22 @@ namespace GLOBALWARMINGDENIAL
                 Rectangle tileHb = new Rectangle((int)potentialCollision.position.X, (int)potentialCollision.position.Y, World.TILE_SIZE, World.TILE_SIZE);
 
                 // If we are intersecting with this tile, push the player back out
-
                 while (playerHb.Intersects(tileHb) && attempts < 100)
                 {
                     attempts++;
-                    // Hit from top
-                    if (previousHitbox.Bottom <= tileHb.Top + 1)
-                    {
-                        position.Y -= velocity.Y / 10;
-                    }
 
                     playerHb = this.GetHitbox();
-                    
-                    // Hit from right
-                    if (previousHitbox.Left >= tileHb.Right)
+                   
+                    if (previousHitbox.Bottom <= tileHb.Top + 1) // Hit from top
+                    {
+                        position.Y -= velocity.Y / 10;
+                    } else if (previousHitbox.Left >= tileHb.Right) // Hit from the right
                     {
                         position.X -= velocity.X / 10;
-                    }
-
-                    // Hit from left
-                    if (previousHitbox.Right <= tileHb.Left)
+                    } else if (previousHitbox.Right <= tileHb.Left) // Hit from the left
                     {
                         position.X -= velocity.X / 10;
-                    }
-
-                    // Hit from bottom
-                    if (previousHitbox.Top >= tileHb.Bottom)
+                    } else if (previousHitbox.Top >= tileHb.Bottom) // Hit from the bottom
                     {
                         position.Y -= velocity.Y / 10;
                     }

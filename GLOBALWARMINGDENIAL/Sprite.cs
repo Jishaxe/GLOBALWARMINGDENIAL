@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GLOBALWARMINGDENIAL
 {
     // Basic sprite class, please extend this.
-    class Sprite
+    public class Sprite
     {
         public Vector2 position = new Vector2();
         public Vector2 velocity;
@@ -25,6 +25,11 @@ namespace GLOBALWARMINGDENIAL
         public virtual void Draw (SpriteBatch batch)
         {
             batch.Draw(texture, position + game.camera, Color.White);
+        }
+
+        public Vector2 GetCenter()
+        {
+            return new Vector2(position.X + texture.Width / 2, position.Y + texture.Height / 2);
         }
 
         // Produce a hitbox of this player

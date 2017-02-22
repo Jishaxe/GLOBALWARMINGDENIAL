@@ -9,7 +9,12 @@ using System.Threading.Tasks;
 
 namespace GLOBALWARMINGDENIAL
 {
-    class World
+    public enum TileDirection
+    {
+        UP, DOWN, LEFT, RIGHT
+    }
+
+    public class World
     {
         public const int TILE_SIZE = 100;
 
@@ -33,10 +38,11 @@ namespace GLOBALWARMINGDENIAL
             // For the moment, just fill up the whole screen with dirt
             for (int x = 0; x < width; x += TILE_SIZE)
             {
-                for (int y = 250; y < height; y += TILE_SIZE)
+                for (int y = 0; y < height; y += TILE_SIZE)
                 {
                     Tile tile = new Tile(game, this);
                     tile.position = new Vector2(x, y);
+                    if (y < 250) tile.IsDug = true;
                     tiles.Add(tile);
                 }
             }

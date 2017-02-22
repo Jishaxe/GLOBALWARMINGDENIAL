@@ -4,8 +4,12 @@ using Microsoft.Xna.Framework.Input;
 
 /* ISSUES
  * Getting collisions working
- * Solved by: switching to a different collision technique and experimenting
- * Needed to compensate for gravity for some fucking reason
+ * Solved by: switching to a hybrid collision technique
+ * 
+ * Getting stuck on a surface when sliding along it
+ * Solved by: Replacing the ifs with else if because it was only checking to see if it was to the left
+ * 
+ * Player is able to dig through floating blocks
  */
 namespace GLOBALWARMINGDENIAL
 {
@@ -17,7 +21,7 @@ namespace GLOBALWARMINGDENIAL
         public GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Player player;
-        World world;
+        public World world;
         MouseState mouse;
         KeyboardState keyboard;
         public Vector2 camera = new Vector2(0, 0);

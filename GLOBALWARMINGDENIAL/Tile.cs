@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GLOBALWARMINGDENIAL
 {
-    class Tile: Sprite
+    public class Tile: Sprite
     {
         public bool IsDug = false;
         public World world;
@@ -18,30 +18,21 @@ namespace GLOBALWARMINGDENIAL
             this.world = world;
         }
 
-        // Returns the tile immediately below this one
-        public Tile GetBelow()
+        public Tile GetTileInDirection(TileDirection direction)
         {
-            return world.GetTile(new Vector2(position.X + World.TILE_SIZE / 2, position.Y + World.TILE_SIZE * 1.5f));
+            switch (direction)
+            {
+                case TileDirection.DOWN:
+                    return world.GetTile(new Vector2(position.X + World.TILE_SIZE / 2, position.Y + World.TILE_SIZE * 1.5f));
+                case TileDirection.LEFT:
+                    return world.GetTile(new Vector2(position.X - World.TILE_SIZE / 2, position.Y + World.TILE_SIZE / 2));
+                case TileDirection.RIGHT:
+                    return world.GetTile(new Vector2(position.X + World.TILE_SIZE * 1.5f, position.Y + World.TILE_SIZE / 2));
+                case TileDirection.UP:
+                    return world.GetTile(new Vector2(position.X + World.TILE_SIZE / 2, position.Y - World.TILE_SIZE / 2));
+                default:
+                    return null;
+            }
         }
-
-        // Returns the tile immediately left of this one
-        public Tile GetLeft()
-        {
-            return world.GetTile(new Vector2(position.X - World.TILE_SIZE / 2, position.Y + World.TILE_SIZE / 2));
-        }
-
-        // Returns the tile immediately right of this one
-        public Tile GetRight()
-        {
-            return world.GetTile(new Vector2(position.X + World.TILE_SIZE * 1.5f, position.Y + World.TILE_SIZE / 2));
-        }
-
-        // Returns the tile immediately above this one
-        public Tile GetAbove()
-        {
-            return world.GetTile(new Vector2(position.X + World.TILE_SIZE / 2, position.Y - World.TILE_SIZE / 2));
-        }
-
-
     }
 }
