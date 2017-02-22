@@ -45,13 +45,15 @@ namespace GLOBALWARMINGDENIAL
 
             foreach (Tile potentialCollision in surroundingTiles)
             {
+                int attempts = 0;
                 if (potentialCollision.IsDug) continue;
                 Rectangle tileHb = new Rectangle((int)potentialCollision.position.X, (int)potentialCollision.position.Y, World.TILE_SIZE, World.TILE_SIZE);
 
                 // If we are intersecting with this tile, push the player back out
 
-                while (playerHb.Intersects(tileHb))
+                while (playerHb.Intersects(tileHb) && attempts < 100)
                 {
+                    attempts++;
                     // Hit from top
                     if (previousHitbox.Bottom <= tileHb.Top + 1)
                     {
