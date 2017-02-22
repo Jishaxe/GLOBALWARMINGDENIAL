@@ -43,32 +43,39 @@ namespace GLOBALWARMINGDENIAL
             // Make two rectangles we can use to test intersection
             Rectangle playerHb = this.GetHitbox();
 
-            foreach (Tile potentialCollision in world.tiles)
+            foreach (Tile potentialCollision in surroundingTiles)
             {
                 if (potentialCollision.IsDug) continue;
                 Rectangle tileHb = new Rectangle((int)potentialCollision.position.X, (int)potentialCollision.position.Y, World.TILE_SIZE, World.TILE_SIZE);
 
                 // If we are intersecting with this tile, push the player back out
-                // The velocity is being multiplied by 3 to give it the shaken look
 
-                if (playerHb.Intersects(tileHb))
+                while (playerHb.Intersects(tileHb))
                 {
                     // Hit from top
                     if (previousHitbox.Bottom <= tileHb.Top + 1)
                     {
-                        position.Y = tileHb.Y - playerHb.Height - velocity.Y * 3f;
+                        position.Y -= velocity.Y / 10;
                     }
+
+                    playerHb = this.GetHitbox();
                     
                     // Hit from right
                     if (previousHitbox.Left >= tileHb.Right)
                     {
-                        position.X = tileHb.Right - velocity.X * 3f;
+                        position.X -= velocity.X / 10;
                     }
 
                     // Hit from left
                     if (previousHitbox.Right <= tileHb.Left)
                     {
-                        position.X = tileHb.Left - playerHb.Width - velocity.X * 3;
+                        position.X -= velocity.X / 10;
+                    }
+
+                    // Hit from bottom
+                    if (previousHitbox.Top >= tileHb.Bottom)
+                    {
+                        position.Y -= velocity.Y / 10;
                     }
                 }
             }
