@@ -20,7 +20,8 @@ namespace GLOBALWARMINGDENIAL
         {
             if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.Left)) velocity.X -= 0.5f;
             if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right)) velocity.X += 0.5f;
-            if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down)) velocity.Y += 0.5f;         
+            if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down)) velocity.Y += 0.5f;
+            if (keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.Up)) velocity.Y -= 1.5f;
         }
 
         public override void Update ()
@@ -48,27 +49,27 @@ namespace GLOBALWARMINGDENIAL
                 Rectangle tileHb = new Rectangle((int)potentialCollision.position.X, (int)potentialCollision.position.Y, World.TILE_SIZE, World.TILE_SIZE);
 
                 // If we are intersecting with this tile, push the player back out
+                // The velocity is being multiplied by 3 to give it the shaken look
+
                 if (playerHb.Intersects(tileHb))
                 {
                     // Hit from top
                     if (previousHitbox.Bottom <= tileHb.Top + 1)
                     {
-                        position.Y = tileHb.Y - playerHb.Height - velocity.Y;
-                        //velocity.Y = -velocity.Y;
+                        position.Y = tileHb.Y - playerHb.Height - velocity.Y * 3f;
                     }
-                    /*
+                    
                     // Hit from right
                     if (previousHitbox.Left >= tileHb.Right)
                     {
-                        position.X = tileHb.Right + velocity.X;
-                        velocity.X = -velocity.X;
+                        position.X = tileHb.Right - velocity.X * 3f;
                     }
 
                     // Hit from left
                     if (previousHitbox.Right <= tileHb.Left)
                     {
-                        position.X = tileHb.Left - playerHb.Width;// - velocity.X;
-                    }*/
+                        position.X = tileHb.Left - playerHb.Width - velocity.X * 3;
+                    }
                 }
             }
 
