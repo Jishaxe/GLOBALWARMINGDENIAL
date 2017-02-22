@@ -35,7 +35,7 @@ namespace GLOBALWARMINGDENIAL
             {
                 for (int y = 250; y < height; y += TILE_SIZE)
                 {
-                    Tile tile = new Tile();
+                    Tile tile = new Tile(game);
                     tile.position = new Vector2(x, y);
                     tiles.Add(tile);
                 }
@@ -83,7 +83,7 @@ namespace GLOBALWARMINGDENIAL
             {
                 // Don't draw this tile if it's dug up
                 if (tile.IsDug) continue;
-                batch.Draw(dirt, tile.position, Color.White);
+                batch.Draw(dirt, tile.position + game.camera, Color.White);
             }
         }
     }

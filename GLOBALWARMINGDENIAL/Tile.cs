@@ -10,5 +10,9 @@ namespace GLOBALWARMINGDENIAL
     class Tile: Sprite
     {
         public bool IsDug = false;
+
+        public Tile(GlobalWarmingDenial game) : base(game)
+        {
+        }
     }
 }

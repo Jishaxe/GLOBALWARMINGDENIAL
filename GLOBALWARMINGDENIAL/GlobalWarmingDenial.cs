@@ -20,6 +20,7 @@ namespace GLOBALWARMINGDENIAL
         World world;
         MouseState mouse;
         KeyboardState keyboard;
+        public Vector2 camera = new Vector2(0, 0);
 
         public GlobalWarmingDenial()
         {
@@ -41,7 +42,7 @@ namespace GLOBALWARMINGDENIAL
             world.dirt = Content.Load<Texture2D>("dirt");
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            player = new Player();
+            player = new Player(this);
             player.texture = Content.Load<Texture2D>("drill");
 
             world.Build();
@@ -76,6 +77,8 @@ namespace GLOBALWARMINGDENIAL
             player.Update();
             player.CollideWithWorld(world);
 
+            float centerOfScreen = GraphicsDevice.Viewport.Height / 2;
+            camera.Y += (centerOfScreen - camera.Y - player.position.Y) / 50;
             base.Update(gameTime);
         }
 
