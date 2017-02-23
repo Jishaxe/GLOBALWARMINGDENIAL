@@ -80,11 +80,10 @@ namespace GLOBALWARMINGDENIAL
 
             player.Update();
             player.CollideWithWorld(world);
-
-            float centerOfScreen = GraphicsDevice.Viewport.Height / 2;
-            camera.Y += (centerOfScreen - camera.Y - player.position.Y) / 20;
-
             world.Update();
+
+            float centerOfScreen = GraphicsDevice.Viewport.Height / 5;
+            camera.Y += (centerOfScreen - camera.Y - player.position.Y) / 1f;
             base.Update(gameTime);
         }
 

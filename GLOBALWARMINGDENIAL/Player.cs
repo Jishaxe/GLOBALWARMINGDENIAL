@@ -13,7 +13,7 @@ namespace GLOBALWARMINGDENIAL
     {
         public Rectangle previousHitbox = new Rectangle();
         public DiggingState Digging = new DiggingState();
-        public int diggingDelay = 5;
+        public int diggingDelay = 8;
 
         public Player(GlobalWarmingDenial game) : base(game)
         {

@@ -48,7 +48,7 @@ namespace GLOBALWARMINGDENIAL
                 for (int x = 0; x < game.graphics.GraphicsDevice.Viewport.Width; x += TILE_SIZE)
                 {
                     Tile tile = new Tile(game, this, TileType.DIRT);
-                    //if (rng.Next(20) == 5) tile.type = TileType.ROCK;
+                    if (rng.Next(20) == 5) tile.type = TileType.ROCK;
                     tile.position = new Vector2(x, y);
                     if (y < 250) tile.type = TileType.EMPTY; // Make a blank space at the top of the screen
 
