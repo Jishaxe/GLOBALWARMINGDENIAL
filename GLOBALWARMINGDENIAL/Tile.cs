@@ -10,12 +10,13 @@ namespace GLOBALWARMINGDENIAL
 {
     public class Tile: Sprite
     {
-        public bool IsDug = false;
+        public TileType type;
         public World world;
 
-        public Tile(GlobalWarmingDenial game, World world) : base(game)
+        public Tile(GlobalWarmingDenial game, World world, TileType type) : base(game)
         {
             this.world = world;
+            this.type = type;
         }
 
         public Tile GetTileInDirection(TileDirection direction)

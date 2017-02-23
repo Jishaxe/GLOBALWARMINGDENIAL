@@ -13,6 +13,7 @@ namespace GLOBALWARMINGDENIAL
     {
         public Rectangle previousHitbox = new Rectangle();
         public DiggingState Digging = new DiggingState();
+        public int diggingDelay = 5;
 
         public Player(GlobalWarmingDenial game) : base(game)
         {
@@ -40,13 +41,13 @@ namespace GLOBALWARMINGDENIAL
             if (tile == null) return; // Cancel if there is no tile below
 
             // Only dig if there is not a dug tile already
-            if (!tile.IsDug)
+            if (tile.type == TileType.DIRT)
             {
                 // Set up the digging state to begin the digging
                 Digging.IsDigging = true;
                 Digging.diggingTarget = tile;
                 Digging.moveTarget = new Vector2(tile.position.X + World.TILE_SIZE / 2, tile.position.Y + World.TILE_SIZE / 2);
-                Digging.timeLeft = 15;
+                Digging.timeLeft = diggingDelay;
             }
             else if (direction == TileDirection.LEFT) velocity.X -= 3f; // Instead move left and right if there are no tiles on those sides
             else if (direction == TileDirection.RIGHT) velocity.X += 3f;
@@ -64,14 +65,14 @@ namespace GLOBALWARMINGDENIAL
                 Digging.timeLeft--;
 
                 // Move the player to the center of the target
-                Vector2 moveBy = (this.GetCenter() - Digging.moveTarget) / 20;
+                Vector2 moveBy = (this.GetCenter() - Digging.moveTarget) / 5;
                 velocity -= moveBy;
 
                 if (Digging.timeLeft == 0)
                 {
                     // Digging has finished
                     Digging.IsDigging = false;
-                    Digging.diggingTarget.IsDug = true;
+                    Digging.diggingTarget.type = TileType.EMPTY;
                 }
             }
 
@@ -96,7 +97,7 @@ namespace GLOBALWARMINGDENIAL
             foreach (Tile potentialCollision in surroundingTiles)
             {
                 int attempts = 0;
-                if (potentialCollision.IsDug) continue;
+                if (potentialCollision.type == TileType.EMPTY) continue;
                 Rectangle tileHb = new Rectangle((int)potentialCollision.position.X, (int)potentialCollision.position.Y, World.TILE_SIZE, World.TILE_SIZE);
 
                 // If we are intersecting with this tile, push the player back out

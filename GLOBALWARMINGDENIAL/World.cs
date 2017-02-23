@@ -14,10 +14,16 @@ namespace GLOBALWARMINGDENIAL
         UP, DOWN, LEFT, RIGHT
     }
 
+    public enum TileType
+    {
+        EMPTY, DIRT, ROCK
+    }
+
     public class World
     {
         public const int TILE_SIZE = 100;
 
+        public Random rng = new Random();
         public Texture2D dirt;
         public List<Tile> tiles = new List<Tile>();
         GlobalWarmingDenial game;
@@ -27,7 +33,6 @@ namespace GLOBALWARMINGDENIAL
         public World (GlobalWarmingDenial game)
         {
             this.game = game;
-
         }
 
         public void Update ()
@@ -42,9 +47,12 @@ namespace GLOBALWARMINGDENIAL
 
                 for (int x = 0; x < game.graphics.GraphicsDevice.Viewport.Width; x += TILE_SIZE)
                 {
-                    Tile tile = new Tile(game, this);
+                    Tile tile = new Tile(game, this, TileType.DIRT);
+                    //if (rng.Next(20) == 5) tile.type = TileType.ROCK;
                     tile.position = new Vector2(x, y);
-                    if (y < 250) tile.IsDug = true; // Make a blank space at the top of the screen
+                    if (y < 250) tile.type = TileType.EMPTY; // Make a blank space at the top of the screen
+
+
                     tiles.Add(tile);
                 }
             }
@@ -101,8 +109,9 @@ namespace GLOBALWARMINGDENIAL
             foreach (Tile tile in tiles)
             {
                 // Don't draw this tile if it's dug up
-                if (tile.IsDug) continue;
-                batch.Draw(dirt, tile.position + game.camera, Color.White);
+                if (tile.type == TileType.EMPTY) continue;
+
+                if (tile.type == TileType.DIRT) batch.Draw(dirt, tile.position + game.camera, Color.White);
             }
         }
     }

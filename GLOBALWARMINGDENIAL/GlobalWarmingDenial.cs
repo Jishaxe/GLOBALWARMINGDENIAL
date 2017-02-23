@@ -10,6 +10,8 @@ using Microsoft.Xna.Framework.Input;
  * Solved by: Replacing the ifs with else if because it was only checking to see if it was to the left
  * 
  * Player is able to dig through floating blocks
+ * 
+ * Player can sit directly in the middle of a block and not move down
  */
 namespace GLOBALWARMINGDENIAL
 {
@@ -73,14 +75,14 @@ namespace GLOBALWARMINGDENIAL
             if (mouse.LeftButton == ButtonState.Pressed)
             {
                 Tile tile = world.GetTile(mouse.Position.ToVector2() - camera);
-                if (tile != null) tile.IsDug = true;
+                if (tile != null) tile.type = TileType.EMPTY;
             }
 
             player.Update();
             player.CollideWithWorld(world);
 
             float centerOfScreen = GraphicsDevice.Viewport.Height / 2;
-            camera.Y += (centerOfScreen - camera.Y - player.position.Y) / 50;
+            camera.Y += (centerOfScreen - camera.Y - player.position.Y) / 20;
 
             world.Update();
             base.Update(gameTime);
