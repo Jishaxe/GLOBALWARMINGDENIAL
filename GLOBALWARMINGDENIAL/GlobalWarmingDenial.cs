@@ -51,7 +51,7 @@ namespace GLOBALWARMINGDENIAL
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
             player = new Player(this);
-            player.texture = Content.Load<Texture2D>("drill");
+            player.texture = Content.Load<Texture2D>("drill2");
         }
 
         protected override void UnloadContent()
