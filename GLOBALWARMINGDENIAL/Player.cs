@@ -76,6 +76,7 @@ namespace GLOBALWARMINGDENIAL
             }
 
             // Bound the player within the walls
+            if (position.Y <= 0) position.Y = 0;
             if (position.X < 0) position.X = 0;
             if (position.X + texture.Width > game.GraphicsDevice.Viewport.Width) position.X = game.GraphicsDevice.Viewport.Width - texture.Width;
             base.Update();

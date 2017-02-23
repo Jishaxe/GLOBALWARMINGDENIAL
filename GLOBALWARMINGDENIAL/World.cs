@@ -22,39 +22,39 @@ namespace GLOBALWARMINGDENIAL
         public List<Tile> tiles = new List<Tile>();
         GlobalWarmingDenial game;
 
+        public int lastY = -250;
+
         public World (GlobalWarmingDenial game)
         {
             this.game = game;
 
         }
 
-        // Builds the world based on the current state
-        public void Build ()
+        public void Update ()
         {
+            Console.WriteLine(tiles.Count);
 
-            int width = game.graphics.GraphicsDevice.Viewport.Width;
-            int height = game.graphics.GraphicsDevice.Viewport.Height;
-
-            // For the moment, just fill up the whole screen with dirt
-            for (int x = 0; x < width; x += TILE_SIZE)
+            // Continuously make new rows of tiles as time passes
+            if (lastY + game.camera.Y < 5000) // If the camera is getting close to the last generated row
             {
-                for (int y = 0; y < 5000; y += TILE_SIZE)
+                int y = lastY + TILE_SIZE; // Add another row onto the last one
+                lastY = y;
+
+                for (int x = 0; x < game.graphics.GraphicsDevice.Viewport.Width; x += TILE_SIZE)
                 {
                     Tile tile = new Tile(game, this);
                     tile.position = new Vector2(x, y);
-                    if (y < 250) tile.IsDug = true;
+                    if (y < 250) tile.IsDug = true; // Make a blank space at the top of the screen
                     tiles.Add(tile);
                 }
             }
-        }
 
-        public void Update ()
-        {
             List<Tile> tileCopy = new List<Tile>(tiles);
+
             // Prune tiles that have left the screen
             foreach (Tile tile in tileCopy)
             {
-                if ((game.camera.Y - tile.position.Y) > 100)
+                if ((-game.camera.Y - tile.position.Y) > 200) // If the camera is 200 far from this tile, delete it
                 {
                     tiles.Remove(tile);
                 }
