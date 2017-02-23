@@ -9,9 +9,11 @@ using Microsoft.Xna.Framework.Input;
  * Getting stuck on a surface when sliding along it
  * Solved by: Replacing the ifs with else if because it was only checking to see if it was to the left
  * 
- * Player is able to dig through floating blocks
+ * Player is able to dig right and left even if there is not a tile below
+ * Solved by: Checking for a tile below
  * 
  * Player can sit directly in the middle of a block and not move down
+ * Solved by: Increasing the intensity of the attraction to the tile when digging
  */
 namespace GLOBALWARMINGDENIAL
 {

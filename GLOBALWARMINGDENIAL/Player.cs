@@ -22,9 +22,9 @@ namespace GLOBALWARMINGDENIAL
         public void HandleInput(MouseState mouse, KeyboardState keyboard)
         {
             if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.Left)) DigInDirection(TileDirection.LEFT);
-            if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right)) DigInDirection(TileDirection.RIGHT);
-            if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down)) DigInDirection(TileDirection.DOWN);
-            if (keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.Up)) velocity.Y -= 4f;
+            else if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right)) DigInDirection(TileDirection.RIGHT);
+            else if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down)) DigInDirection(TileDirection.DOWN);
+            else if (keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.Up)) velocity.Y -= 4f;
         }
 
         // Makes the player dig in a direction
@@ -43,11 +43,39 @@ namespace GLOBALWARMINGDENIAL
             // Only dig if there is not a dug tile already
             if (tile.type == TileType.DIRT)
             {
+                // This is where the player will try to move to when it is digging
+                Vector2 moveTarget = new Vector2();
+
+                if (direction == TileDirection.DOWN)
+                {
+                    moveTarget = new Vector2(tile.position.X + World.TILE_SIZE / 2, tile.position.Y);
+                    Digging.timeLeft = diggingDelay;
+                }
+
+                if (direction == TileDirection.LEFT)
+                {
+                    // If there is an empty tile below, can't move left
+                    Tile below = currentTile.GetTileInDirection(TileDirection.DOWN);
+                    if (below != null && below.type == TileType.EMPTY) return;
+
+                    moveTarget = new Vector2(tile.position.X + World.TILE_SIZE, tile.position.Y + World.TILE_SIZE / 2);
+                    Digging.timeLeft = diggingDelay / 2;
+                }
+
+                if (direction == TileDirection.RIGHT)
+                {
+                    // If there is an empty tile below, can't move right
+                    Tile below = currentTile.GetTileInDirection(TileDirection.DOWN);
+                    if (below != null && below.type == TileType.EMPTY) return;
+                    moveTarget = new Vector2(tile.position.X, tile.position.Y + World.TILE_SIZE / 2);
+                    Digging.timeLeft = diggingDelay / 2;
+                }
+
                 // Set up the digging state to begin the digging
+
                 Digging.IsDigging = true;
                 Digging.diggingTarget = tile;
-                Digging.moveTarget = new Vector2(tile.position.X + World.TILE_SIZE / 2, tile.position.Y + World.TILE_SIZE / 2);
-                Digging.timeLeft = diggingDelay;
+                Digging.moveTarget = moveTarget;
             }
             else if (direction == TileDirection.LEFT) velocity.X -= 3f; // Instead move left and right if there are no tiles on those sides
             else if (direction == TileDirection.RIGHT) velocity.X += 3f;
@@ -55,9 +83,6 @@ namespace GLOBALWARMINGDENIAL
 
         public override void Update ()
         { 
-            // Gravity
-            velocity.Y += 1.1f;
-
             // Make it dig
             if (Digging.IsDigging)
             {
@@ -65,7 +90,7 @@ namespace GLOBALWARMINGDENIAL
                 Digging.timeLeft--;
 
                 // Move the player to the center of the target
-                Vector2 moveBy = (this.GetCenter() - Digging.moveTarget) / 5;
+                Vector2 moveBy = (this.GetCenter() - Digging.moveTarget) / 10;
                 velocity -= moveBy;
 
                 if (Digging.timeLeft == 0)
@@ -74,6 +99,10 @@ namespace GLOBALWARMINGDENIAL
                     Digging.IsDigging = false;
                     Digging.diggingTarget.type = TileType.EMPTY;
                 }
+            } else
+            {
+                // Only apply gravity when not digging
+                velocity.Y += 1.1f;
             }
 
             // Bound the player within the walls
@@ -86,6 +115,8 @@ namespace GLOBALWARMINGDENIAL
         // Collide the player with the tiles in the world
         public void CollideWithWorld (World world)
         {
+            if (Digging.IsDigging) return; // If we're digging, don't do collision
+
             Vector2 center = new Vector2(position.X + texture.Width / 2, position.Y + texture.Height / 2);
 
             // Get the tiles surrounding the player (tiles that could collide)
