@@ -84,11 +84,12 @@ namespace GLOBALWARMINGDENIAL
             else if (direction == TileDirection.RIGHT) velocity.X += 3f;
         }
 
-        public override void Update (GameTime gameTime)
+        public override void Update ()
         { 
             // Make it dig
             if (Digging.IsDigging)
             {
+                this.animations.Play("Drill_Dig");
                 // Reduce the time left on this dig
                 Digging.timeLeft--;
 
@@ -101,6 +102,7 @@ namespace GLOBALWARMINGDENIAL
                     // Digging has finished
                     Digging.IsDigging = false;
                     Digging.diggingTarget.type = TileType.EMPTY;
+                    this.animations.Play("Drill_Idle");
                 }
             } else
             {
@@ -112,7 +114,7 @@ namespace GLOBALWARMINGDENIAL
             if (position.Y <= 0) position.Y = 0;
             if (position.X < 0) position.X = 0;
             if (position.X + texture.Width > game.GraphicsDevice.Viewport.Width) position.X = game.GraphicsDevice.Viewport.Width - texture.Width;
-            base.Update(gameTime);
+            base.Update();
         }
 
         // Collide the player with the tiles in the world

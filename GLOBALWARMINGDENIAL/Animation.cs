@@ -13,9 +13,6 @@ namespace GLOBALWARMINGDENIAL
     public class Animation
     {
         string name;
-        public bool isPlaying = false;
-        public bool isLooping = true;
-
         int frame = 0;
         List<Rectangle> frames = new List<Rectangle>();
         Texture2D spritesheet;
@@ -33,10 +30,9 @@ namespace GLOBALWARMINGDENIAL
             for (int x = 0; x < spritesheet.Width; x += cellWidth) frames.Add(new Rectangle(x, 0, cellWidth, cellHeight));
         }
 
-        public void Update (GameTime gameTime)
+        public void Update (bool isLooping)
         {
             // Should probably compensate for variable time step at some point
-            if (!isPlaying) return;
 
             frame++;
             if (frame == frames.Count)
