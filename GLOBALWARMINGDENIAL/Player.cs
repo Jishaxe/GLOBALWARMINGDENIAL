@@ -50,6 +50,7 @@ namespace GLOBALWARMINGDENIAL
                 {
                     moveTarget = new Vector2(tile.position.X + World.TILE_SIZE / 2, tile.position.Y);
                     Digging.timeLeft = diggingDelay;
+                    Digging.moveForce = 10;
                 }
 
                 if (direction == TileDirection.LEFT)
@@ -60,6 +61,7 @@ namespace GLOBALWARMINGDENIAL
 
                     moveTarget = new Vector2(tile.position.X + World.TILE_SIZE, tile.position.Y + World.TILE_SIZE / 2);
                     Digging.timeLeft = diggingDelay / 2;
+                    Digging.moveForce = 2;
                 }
 
                 if (direction == TileDirection.RIGHT)
@@ -69,6 +71,7 @@ namespace GLOBALWARMINGDENIAL
                     if (below != null && below.type == TileType.EMPTY) return;
                     moveTarget = new Vector2(tile.position.X, tile.position.Y + World.TILE_SIZE / 2);
                     Digging.timeLeft = diggingDelay / 2;
+                    Digging.moveForce = 2;
                 }
 
                 // Set up the digging state to begin the digging
@@ -90,7 +93,7 @@ namespace GLOBALWARMINGDENIAL
                 Digging.timeLeft--;
 
                 // Move the player to the center of the target
-                Vector2 moveBy = (this.GetCenter() - Digging.moveTarget) / 10;
+                Vector2 moveBy = (this.GetCenter() - Digging.moveTarget) / Digging.moveForce;
                 velocity -= moveBy;
 
                 if (Digging.timeLeft == 0)
