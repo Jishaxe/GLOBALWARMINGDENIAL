@@ -84,7 +84,7 @@ namespace GLOBALWARMINGDENIAL
             else if (direction == TileDirection.RIGHT) velocity.X += 3f;
         }
 
-        public override void Update ()
+        public override void Update (GameTime gameTime)
         { 
             // Make it dig
             if (Digging.IsDigging)
@@ -112,7 +112,7 @@ namespace GLOBALWARMINGDENIAL
             if (position.Y <= 0) position.Y = 0;
             if (position.X < 0) position.X = 0;
             if (position.X + texture.Width > game.GraphicsDevice.Viewport.Width) position.X = game.GraphicsDevice.Viewport.Width - texture.Width;
-            base.Update();
+            base.Update(gameTime);
         }
 
         // Collide the player with the tiles in the world

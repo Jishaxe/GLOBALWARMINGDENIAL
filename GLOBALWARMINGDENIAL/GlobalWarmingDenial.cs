@@ -52,6 +52,8 @@ namespace GLOBALWARMINGDENIAL
             spriteBatch = new SpriteBatch(GraphicsDevice);
             player = new Player(this);
             player.texture = Content.Load<Texture2D>("drill2");
+            player.animation.Load("Drill_Idle", Content, 55, 60);
+            player.animation.isPlaying = true;
         }
 
         protected override void UnloadContent()
@@ -80,7 +82,7 @@ namespace GLOBALWARMINGDENIAL
                 if (tile != null) tile.type = TileType.EMPTY;
             }
 
-            player.Update();
+            player.Update(gameTime);
             player.CollideWithWorld(world);
             world.Update();
 
