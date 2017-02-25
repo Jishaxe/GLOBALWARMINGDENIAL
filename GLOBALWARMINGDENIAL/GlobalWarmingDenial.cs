@@ -47,7 +47,7 @@ namespace GLOBALWARMINGDENIAL
         protected override void LoadContent()
         {
             world = new World(this);
-            world.dirt = Content.Load<Texture2D>("dirt");
+            world.Load(Content);
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
             player = new Player(this);
@@ -80,7 +80,7 @@ namespace GLOBALWARMINGDENIAL
             if (mouse.LeftButton == ButtonState.Pressed)
             {
                 Tile tile = world.GetTile(mouse.Position.ToVector2() - camera);
-                if (tile != null) tile.type = TileType.EMPTY;
+                if (tile != null) tile.Dig();
             }
 
             player.Update();

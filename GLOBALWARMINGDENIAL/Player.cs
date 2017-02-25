@@ -101,7 +101,7 @@ namespace GLOBALWARMINGDENIAL
                 {
                     // Digging has finished
                     Digging.IsDigging = false;
-                    Digging.diggingTarget.type = TileType.EMPTY;
+                    Digging.diggingTarget.Dig();
                     this.animations.Play("Drill_Idle");
                 }
             } else

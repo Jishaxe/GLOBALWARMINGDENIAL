@@ -61,7 +61,7 @@
 /processorParam:TextureFormat=Color
 /build:drill2.png
 
-#begin Drill_Dig
+#begin Drill_Dig.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -71,5 +71,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Drill_Dig
+/build:Drill_Dig.png
 

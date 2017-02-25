@@ -24,15 +24,41 @@ namespace GLOBALWARMINGDENIAL
         public const int TILE_SIZE = 100;
 
         public Random rng = new Random();
-        public Texture2D dirt;
         public List<Tile> tiles = new List<Tile>();
         GlobalWarmingDenial game;
+
+        // This is a list of the 12 different tile textures for all the directions 
+        // The key is the file name, the key is the texture
+        public Dictionary<string, Texture2D> tileTextures = new Dictionary<string, Texture2D>();
+
 
         public int lastY = -250;
 
         public World (GlobalWarmingDenial game)
         {
             this.game = game;
+        }
+
+        public void Load(ContentManager content)
+        {
+            Action<string> LoadEmptyTile = (string name) =>
+            {
+                Texture2D tex = content.Load<Texture2D>(name);
+                tileTextures.Add(name, tex);
+            };
+
+            LoadEmptyTile("dirt");
+            LoadEmptyTile("dirtn");
+            LoadEmptyTile("dirtnw");
+            LoadEmptyTile("dirtnsw");
+            LoadEmptyTile("dirtesw");
+            LoadEmptyTile("dirtnes");
+            LoadEmptyTile("dirtnew");
+            LoadEmptyTile("dirtne");
+            LoadEmptyTile("dirte");
+            LoadEmptyTile("dirts");
+            LoadEmptyTile("dirtw");
+            LoadEmptyTile("dirtes");
         }
 
         public void Update ()
@@ -50,7 +76,12 @@ namespace GLOBALWARMINGDENIAL
                     Tile tile = new Tile(game, this, TileType.DIRT);
                     if (rng.Next(20) == 5) tile.type = TileType.ROCK;
                     tile.position = new Vector2(x, y);
-                    if (y < 250) tile.type = TileType.EMPTY; // Make a blank space at the top of the screen
+                    if (y < 250)
+                    {
+                        // Set the tile to be dug from all directions so it just shows up blank
+                        tile.dugEast = true; tile.dugSouth = true; tile.dugNorth = true; tile.dugWest = true;
+                        tile.type = TileType.EMPTY; // Make a blank space at the top of the screen
+                    }
 
 
                     tiles.Add(tile);
@@ -87,6 +118,25 @@ namespace GLOBALWARMINGDENIAL
             return result;
         }
 
+        // Goes through each tile and bores tunnels in the correct direction
+        public void CheckDugDirections ()
+        {
+            foreach (Tile tile in tiles)
+            {
+                if (tile.type != TileType.EMPTY) continue;
+
+                Tile east = tile.GetTileInDirection(TileDirection.RIGHT);
+                Tile south = tile.GetTileInDirection(TileDirection.DOWN);
+                Tile west = tile.GetTileInDirection(TileDirection.LEFT);
+                Tile north = tile.GetTileInDirection(TileDirection.UP);
+
+                if (east != null && east.type == TileType.EMPTY) tile.dugEast = true;
+                if (south != null && south.type == TileType.EMPTY) tile.dugSouth = true;
+                if (west != null && west.type == TileType.EMPTY) tile.dugWest = true;
+                if (north != null && north.type == TileType.EMPTY) tile.dugNorth = true;
+            }
+        }
+
         // Get the tiles surrounding a point
         public List<Tile> GetTilesAround(Vector2 position, int radius)
         {
@@ -108,10 +158,14 @@ namespace GLOBALWARMINGDENIAL
         {
             foreach (Tile tile in tiles)
             {
-                // Don't draw this tile if it's dug up
-                if (tile.type == TileType.EMPTY) continue;
+                // If this is a dug tile, draw it with the appropriate direction
+                if (tile.type == TileType.EMPTY)
+                {
+                    Texture2D texture = tileTextures["dirt" + tile.GetTextureSuffix()];
+                    batch.Draw(texture, tile.position + game.camera, Color.White);
+                }
 
-                if (tile.type == TileType.DIRT) batch.Draw(dirt, tile.position + game.camera, Color.White);
+                if (tile.type == TileType.DIRT) batch.Draw(tileTextures["dirt"], tile.position + game.camera, Color.White);
             }
         }
     }

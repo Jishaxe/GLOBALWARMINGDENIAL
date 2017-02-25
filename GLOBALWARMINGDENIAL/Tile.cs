@@ -13,10 +13,35 @@ namespace GLOBALWARMINGDENIAL
         public TileType type;
         public World world;
 
+        // Keeps a track of which direction this tile has been bored into when the type is TileType.EMPTY
+        // This will render a sprite with holes in the different directions
+        public bool dugNorth = false;
+        public bool dugEast = false;
+        public bool dugSouth = false;
+        public bool dugWest = false;
+
         public Tile(GlobalWarmingDenial game, World world, TileType type) : base(game)
         {
             this.world = world;
             this.type = type;
+        }
+
+        // Digs out this block
+        public void Dig()
+        {
+            type = TileType.EMPTY;
+            world.CheckDugDirections(); // Updates the world to recreate tunnels
+        }
+
+        // Adds the dug directions together to make a string that we will use to render the correct sprite
+        public string GetTextureSuffix()
+        {
+            string result = "";
+            if (dugNorth) result += "n";
+            if (dugEast) result += "e";
+            if (dugSouth) result += "s";
+            if (dugWest) result += "w";
+            return result;
         }
 
         public Tile GetTileInDirection(TileDirection direction)
