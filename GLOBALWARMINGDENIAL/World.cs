@@ -21,7 +21,7 @@ namespace GLOBALWARMINGDENIAL
 
     public class World
     {
-        public const int TILE_SIZE = 100;
+        public const int TILE_SIZE = 99;
 
         public Random rng = new Random();
         public List<Tile> tiles = new List<Tile>();
@@ -59,6 +59,10 @@ namespace GLOBALWARMINGDENIAL
             LoadEmptyTile("dirts");
             LoadEmptyTile("dirtw");
             LoadEmptyTile("dirtes");
+            LoadEmptyTile("dirtew");
+            LoadEmptyTile("dirtns");
+            LoadEmptyTile("dirtsw");
+            LoadEmptyTile("dirtnesw");
         }
 
         public void Update ()
@@ -161,6 +165,7 @@ namespace GLOBALWARMINGDENIAL
                 // If this is a dug tile, draw it with the appropriate direction
                 if (tile.type == TileType.EMPTY)
                 {
+                    string what = tile.GetTextureSuffix();
                     Texture2D texture = tileTextures["dirt" + tile.GetTextureSuffix()];
                     batch.Draw(texture, tile.position + game.camera, Color.White);
                 }
