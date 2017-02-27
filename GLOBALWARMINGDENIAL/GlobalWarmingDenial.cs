@@ -24,7 +24,11 @@ namespace GLOBALWARMINGDENIAL
     {
         public GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Background background;
+
+        InfiniteScroller background;
+        InfiniteScroller leftWall;
+        InfiniteScroller rightWall;
+
         Player player;
         public World world;
         MouseState mouse;
@@ -38,7 +42,7 @@ namespace GLOBALWARMINGDENIAL
         }
         protected override void Initialize()
         {
-            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferWidth = 900;
             graphics.PreferredBackBufferHeight = 720;
             
             // Center the window on the screen
@@ -50,8 +54,15 @@ namespace GLOBALWARMINGDENIAL
 
         protected override void LoadContent()
         {
-            background = new Background(this);
+            background = new InfiniteScroller(this, 0, 2, 720);
             background.texture = Content.Load<Texture2D>("background");
+
+            Texture2D wall = Content.Load<Texture2D>("wall");
+
+            leftWall = new InfiniteScroller(this, -50, 3, 720);
+            rightWall = new InfiniteScroller(this, GraphicsDevice.Viewport.Width - wall.Width + 50, 3, 720);
+            leftWall.texture = wall;
+            rightWall.texture = wall;
 
             world = new World(this);
             world.Load(Content);
@@ -109,6 +120,8 @@ namespace GLOBALWARMINGDENIAL
             background.Draw(spriteBatch);
             world.Draw(spriteBatch);
             player.Draw(spriteBatch);
+            leftWall.Draw(spriteBatch);
+            rightWall.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
