@@ -49,6 +49,18 @@
 /processorParam:TextureFormat=Color
 /build:drill2.png
 
+#begin Drill_Dig
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Drill_Dig
+
 #begin dirt.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -145,6 +157,18 @@
 /processorParam:TextureFormat=Color
 /build:dirtnes.png
 
+#begin dirtnesw.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:dirtnesw.png
+
 #begin dirtnew.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -228,28 +252,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:dirtw.png
-
-#begin Drill_Dig
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Drill_Dig
-
-#begin dirtnesw.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:dirtnesw.png
 

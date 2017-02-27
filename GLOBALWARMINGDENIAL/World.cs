@@ -21,7 +21,7 @@ namespace GLOBALWARMINGDENIAL
 
     public class World
     {
-        public const int TILE_SIZE = 99;
+        public const int TILE_SIZE = 69;
 
         public Random rng = new Random();
         public List<Tile> tiles = new List<Tile>();
