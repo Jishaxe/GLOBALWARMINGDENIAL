@@ -24,6 +24,7 @@ namespace GLOBALWARMINGDENIAL
     {
         public GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Background background;
         Player player;
         public World world;
         MouseState mouse;
@@ -39,6 +40,9 @@ namespace GLOBALWARMINGDENIAL
         {
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
+            
+            // Center the window on the screen
+            this.Window.Position = new Point(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2 - 640, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2 - 360);
             graphics.ApplyChanges();
             IsMouseVisible = true;
             base.Initialize();
@@ -46,6 +50,9 @@ namespace GLOBALWARMINGDENIAL
 
         protected override void LoadContent()
         {
+            background = new Background(this);
+            background.texture = Content.Load<Texture2D>("background");
+
             world = new World(this);
             world.Load(Content);
 
@@ -55,6 +62,8 @@ namespace GLOBALWARMINGDENIAL
             player.animations.Load("Drill_Idle", Content, 55, 60);
             player.animations.Load("Drill_Dig", Content, 61, 78);
             player.animations.Play("Drill_Idle");
+
+            background.texture = Content.Load<Texture2D>("background");
         }
 
         protected override void UnloadContent()
@@ -97,6 +106,7 @@ namespace GLOBALWARMINGDENIAL
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
+            background.Draw(spriteBatch);
             world.Draw(spriteBatch);
             player.Draw(spriteBatch);
             spriteBatch.End();

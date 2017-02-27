@@ -67,8 +67,6 @@ namespace GLOBALWARMINGDENIAL
 
         public void Update ()
         {
-            Console.WriteLine(tiles.Count);
-
             // Continuously make new rows of tiles as time passes
             if (lastY + game.camera.Y < 5000) // If the camera is getting close to the last generated row
             {
