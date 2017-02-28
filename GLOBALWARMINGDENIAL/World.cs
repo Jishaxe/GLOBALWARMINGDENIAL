@@ -41,28 +41,29 @@ namespace GLOBALWARMINGDENIAL
 
         public void Load(ContentManager content)
         {
-            Action<string> LoadEmptyTile = (string name) =>
+            Action<string> LoadTileTexture = (string name) =>
             {
                 Texture2D tex = content.Load<Texture2D>(name);
                 tileTextures.Add(name, tex);
             };
 
-            LoadEmptyTile("dirt");
-            LoadEmptyTile("dirtn");
-            LoadEmptyTile("dirtnw");
-            LoadEmptyTile("dirtnsw");
-            LoadEmptyTile("dirtesw");
-            LoadEmptyTile("dirtnes");
-            LoadEmptyTile("dirtnew");
-            LoadEmptyTile("dirtne");
-            LoadEmptyTile("dirte");
-            LoadEmptyTile("dirts");
-            LoadEmptyTile("dirtw");
-            LoadEmptyTile("dirtes");
-            LoadEmptyTile("dirtew");
-            LoadEmptyTile("dirtns");
-            LoadEmptyTile("dirtsw");
-            LoadEmptyTile("dirtnesw");
+            LoadTileTexture("dirt");
+            LoadTileTexture("dirtn");
+            LoadTileTexture("dirtnw");
+            LoadTileTexture("dirtnsw");
+            LoadTileTexture("dirtesw");
+            LoadTileTexture("dirtnes");
+            LoadTileTexture("dirtnew");
+            LoadTileTexture("dirtne");
+            LoadTileTexture("dirte");
+            LoadTileTexture("dirts");
+            LoadTileTexture("dirtw");
+            LoadTileTexture("dirtes");
+            LoadTileTexture("dirtew");
+            LoadTileTexture("dirtns");
+            LoadTileTexture("dirtsw");
+            LoadTileTexture("dirtnesw");
+            LoadTileTexture("rock");
         }
 
         public void Update ()
@@ -160,15 +161,14 @@ namespace GLOBALWARMINGDENIAL
         {
             foreach (Tile tile in tiles)
             {
-                // If this is a dug tile, draw it with the appropriate direction
-                if (tile.type == TileType.EMPTY)
-                {
-                    string what = tile.GetTextureSuffix();
-                    Texture2D texture = tileTextures["dirt" + tile.GetTextureSuffix()];
-                    batch.Draw(texture, tile.position + game.camera, Color.White);
-                }
+                Texture2D tex = null;
 
-                if (tile.type == TileType.DIRT) batch.Draw(tileTextures["dirt"], tile.position + game.camera, Color.White);
+                // If this is a dug tile, draw it with the appropriate direction
+                if (tile.type == TileType.EMPTY) tex = tileTextures["dirt" + tile.GetTextureSuffix()];
+                if (tile.type == TileType.ROCK) tex = tileTextures["rock"];
+                if (tile.type == TileType.DIRT) tex = tileTextures["dirt"];
+
+                batch.Draw(tex, tile.position + game.camera, Color.White);
             }
         }
     }
