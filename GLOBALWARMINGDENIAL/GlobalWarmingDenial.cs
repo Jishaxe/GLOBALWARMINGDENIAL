@@ -70,6 +70,7 @@ namespace GLOBALWARMINGDENIAL
             spriteBatch = new SpriteBatch(GraphicsDevice);
             player = new Player(this);
             player.texture = Content.Load<Texture2D>("drill2");
+            player.animations = new AnimationManager();
             player.animations.Load("Drill_Idle", Content, 55, 60);
             player.animations.Load("Drill_Dig", Content, 61, 78);
             player.animations.Play("Drill_Idle");

@@ -23,7 +23,7 @@ namespace GLOBALWARMINGDENIAL
     {
         public const int TILE_SIZE = 69;
 
-        public Random rng = new Random();
+        Generator gen;
         public List<Tile> tiles = new List<Tile>();
         GlobalWarmingDenial game;
 
@@ -37,6 +37,7 @@ namespace GLOBALWARMINGDENIAL
         public World (GlobalWarmingDenial game)
         {
             this.game = game;
+            gen = new Generator(game, this);
         }
 
         public void Load(ContentManager content)
@@ -69,15 +70,15 @@ namespace GLOBALWARMINGDENIAL
         public void Update ()
         {
             // Continuously make new rows of tiles as time passes
-            if (lastY + game.camera.Y < 5000) // If the camera is getting close to the last generated row
+            if (lastY + game.camera.Y < 850) // If the camera is getting close to the last generated row
             {
                 int y = lastY + TILE_SIZE; // Add another row onto the last one
                 lastY = y;
 
                 for (int x = 0; x < game.graphics.GraphicsDevice.Viewport.Width; x += TILE_SIZE)
                 {
-                    Tile tile = new Tile(game, this, TileType.DIRT);
-                    if (rng.Next(20) == 5) tile.type = TileType.ROCK;
+                    Tile tile = gen.PickNextTile(this.GetTile(new Vector2(x, y - 50)));
+
                     tile.position = new Vector2(x, y);
                     if (y < 250)
                     {
@@ -88,6 +89,7 @@ namespace GLOBALWARMINGDENIAL
 
 
                     tiles.Add(tile);
+                    this.CheckDugDirections();
                 }
             }
 

@@ -16,7 +16,7 @@ namespace GLOBALWARMINGDENIAL
         public float drag = 0.8f;
         public GlobalWarmingDenial game;
         public Texture2D texture;
-        public AnimationManager animations = new AnimationManager();
+        public AnimationManager animations;
         
         public Sprite (GlobalWarmingDenial game)
         {
@@ -25,7 +25,7 @@ namespace GLOBALWARMINGDENIAL
 
         public virtual void Draw (SpriteBatch batch)
         {
-            if (animations.isPlaying)
+            if (animations != null && animations.isPlaying)
             {
                 animations.DrawCurrentFrame(batch, position + game.camera);
             }
@@ -48,7 +48,7 @@ namespace GLOBALWARMINGDENIAL
 
         public virtual void Update ()
         {
-            if (animations.isPlaying)
+            if (animations != null && animations.isPlaying)
             {
                 animations.Update();
             }
