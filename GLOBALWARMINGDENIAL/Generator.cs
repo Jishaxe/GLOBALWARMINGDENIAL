@@ -16,12 +16,15 @@ namespace GLOBALWARMINGDENIAL
             this.world = world;
         }
 
+
+        // Pciks a random tile
         public Tile PickNextTile(Tile lastTile)
         {
-            int chanceOfEmpty = 10;
+            int chanceOfEmpty = 2;
             int chanceOfDirt = 20;
-            int chanceOfRock = 5;
+            int chanceOfRock = 1;
 
+            // More chance of empty above a near empty and same for rock
             if (lastTile != null) {
                 if (lastTile.type == TileType.EMPTY)
                 {
@@ -33,6 +36,7 @@ namespace GLOBALWARMINGDENIAL
                 }
             }
 
+            // Pick one from our bag of possible tiles
             List<TileType> tileBag = new List<TileType>();
 
             for (int i = 0; i < chanceOfEmpty; i++) tileBag.Add(TileType.EMPTY);
