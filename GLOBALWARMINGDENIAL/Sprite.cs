@@ -17,6 +17,7 @@ namespace GLOBALWARMINGDENIAL
         public GlobalWarmingDenial game;
         public Texture2D texture;
         public AnimationManager animations;
+        public Color color = Color.White;
         
         public Sprite (GlobalWarmingDenial game)
         {
@@ -27,11 +28,11 @@ namespace GLOBALWARMINGDENIAL
         {
             if (animations != null && animations.isPlaying)
             {
-                animations.DrawCurrentFrame(batch, position + game.camera);
+                animations.DrawCurrentFrame(batch, position + game.camera, color);
             }
             else
             {
-                batch.Draw(texture, position + game.camera, Color.White);
+                batch.Draw(texture, position + game.camera, color);
             }
         }
 

@@ -24,7 +24,7 @@ namespace GLOBALWARMINGDENIAL
             if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.Left)) DigInDirection(TileDirection.LEFT);
             else if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right)) DigInDirection(TileDirection.RIGHT);
             else if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down)) DigInDirection(TileDirection.DOWN);
-            else if (keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.Up)) velocity.Y -= 4f;
+            //else if (keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.Up)) velocity.Y -= 4f;
         }
 
         // Makes the player dig in a direction

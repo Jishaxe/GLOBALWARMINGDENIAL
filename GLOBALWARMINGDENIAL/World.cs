@@ -170,7 +170,7 @@ namespace GLOBALWARMINGDENIAL
                 if (tile.type == TileType.ROCK) tex = tileTextures["rock"];
                 if (tile.type == TileType.DIRT) tex = tileTextures["dirt"];
 
-                batch.Draw(tex, tile.position + game.camera, Color.White);
+                batch.Draw(tex, tile.position + game.camera, tile.color);
             }
         }
     }

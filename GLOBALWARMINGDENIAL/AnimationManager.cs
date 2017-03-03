@@ -39,9 +39,9 @@ namespace GLOBALWARMINGDENIAL
         {
             if (isPlaying && currentAnimation != null) currentAnimation.Update(isLooping);
         }
-        public void DrawCurrentFrame(SpriteBatch batch, Vector2 position)
+        public void DrawCurrentFrame(SpriteBatch batch, Vector2 position, Color color)
         {
-            if (isPlaying && currentAnimation != null) currentAnimation.DrawCurrentFrame(batch, position);
+            if (isPlaying && currentAnimation != null) currentAnimation.DrawCurrentFrame(batch, position, color);
         }
 
         public void Stop()

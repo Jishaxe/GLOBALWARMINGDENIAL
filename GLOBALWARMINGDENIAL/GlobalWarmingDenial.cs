@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 /* ISSUES
  * Getting collisions working
@@ -29,10 +30,13 @@ namespace GLOBALWARMINGDENIAL
         InfiniteScroller leftWall;
         InfiniteScroller rightWall;
 
+        public FireWall fire;
+
         Player player;
-        public World world;
         MouseState mouse;
         KeyboardState keyboard;
+
+        public World world;
         public Vector2 camera = new Vector2(0, 0);
 
         public GlobalWarmingDenial()
@@ -54,6 +58,11 @@ namespace GLOBALWARMINGDENIAL
 
         protected override void LoadContent()
         {
+            fire = new FireWall(this);
+            fire.texture = Content.Load<Texture2D>("fire");
+            fire.position.Y = -1000;
+            
+
             background = new InfiniteScroller(this, 0, 2, 720);
             background.texture = Content.Load<Texture2D>("background");
 
@@ -108,8 +117,9 @@ namespace GLOBALWARMINGDENIAL
             player.CollideWithWorld(world);
             world.Update();
 
+            fire.Update();
             float centerOfScreen = GraphicsDevice.Viewport.Height / 5;
-            camera.Y += (centerOfScreen - camera.Y - player.position.Y) / 1f;
+            camera.Y += (centerOfScreen - camera.Y - player.position.Y) / 10f;
             base.Update(gameTime);
         }
 
@@ -123,6 +133,7 @@ namespace GLOBALWARMINGDENIAL
             player.Draw(spriteBatch);
             leftWall.Draw(spriteBatch);
             rightWall.Draw(spriteBatch);
+            fire.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

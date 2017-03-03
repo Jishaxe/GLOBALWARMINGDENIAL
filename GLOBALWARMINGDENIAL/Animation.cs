@@ -42,10 +42,10 @@ namespace GLOBALWARMINGDENIAL
             }
         }
         
-        public void DrawCurrentFrame(SpriteBatch batch, Vector2 position)
+        public void DrawCurrentFrame(SpriteBatch batch, Vector2 position, Color color)
         {
             Rectangle currentFrame = frames[frame];
-            batch.Draw(spritesheet, new Rectangle((int)position.X, (int)position.Y, cellWidth, cellHeight), currentFrame, Color.White);
+            batch.Draw(spritesheet, new Rectangle((int)position.X, (int)position.Y, cellWidth, cellHeight), currentFrame, color);
         }
     }
 }

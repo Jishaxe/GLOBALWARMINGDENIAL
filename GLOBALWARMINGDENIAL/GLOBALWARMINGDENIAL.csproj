@@ -59,6 +59,8 @@
   <ItemGroup>
     <Compile Include="Animation.cs" />
     <Compile Include="AnimationManager.cs" />
+    <Compile Include="Background.cs" />
+    <Compile Include="FireWall.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="InfiniteScroller.cs" />
     <Compile Include="DiggingState.cs" />
