@@ -28,11 +28,11 @@ namespace GLOBALWARMINGDENIAL
         {
             if (animations != null && animations.isPlaying)
             {
-                animations.DrawCurrentFrame(batch, position + game.camera, color);
+                animations.DrawCurrentFrame(batch, position + game.cameraTranslation, color);
             }
             else
             {
-                batch.Draw(texture, position + game.camera, color);
+                batch.Draw(texture, position + game.cameraTranslation, color);
             }
         }
 

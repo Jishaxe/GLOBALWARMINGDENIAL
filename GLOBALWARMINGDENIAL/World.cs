@@ -70,7 +70,7 @@ namespace GLOBALWARMINGDENIAL
         public void Update ()
         {
             // Continuously make new rows of tiles as time passes
-            if (lastY + game.camera.Y < 850) // If the camera is getting close to the last generated row
+            if (lastY + game.cameraTranslation.Y < 850) // If the camera is getting close to the last generated row
             {
                 int y = lastY + TILE_SIZE; // Add another row onto the last one
                 lastY = y;
@@ -98,7 +98,7 @@ namespace GLOBALWARMINGDENIAL
             // Prune tiles that have left the screen
             foreach (Tile tile in tileCopy)
             {
-                if ((-game.camera.Y - tile.position.Y) > 200) // If the camera is 200 far from this tile, delete it
+                if ((-game.cameraTranslation.Y - tile.position.Y) > 200) // If the camera is 200 far from this tile, delete it
                 {
                     tiles.Remove(tile);
                 }
@@ -170,7 +170,7 @@ namespace GLOBALWARMINGDENIAL
                 if (tile.type == TileType.ROCK) tex = tileTextures["rock"];
                 if (tile.type == TileType.DIRT) tex = tileTextures["dirt"];
 
-                batch.Draw(tex, tile.position + game.camera, tile.color);
+                batch.Draw(tex, tile.position + game.cameraTranslation, tile.color);
             }
         }
     }

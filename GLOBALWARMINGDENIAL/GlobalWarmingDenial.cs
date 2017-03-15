@@ -25,6 +25,7 @@ namespace GLOBALWARMINGDENIAL
     {
         public GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        public Random rnd = new Random();
 
         InfiniteScroller background;
         InfiniteScroller leftWall;
@@ -38,6 +39,8 @@ namespace GLOBALWARMINGDENIAL
 
         public World world;
         public Vector2 camera = new Vector2(0, 0);
+        public Vector2 cameraTranslation = new Vector2(0, 0);
+        public Vector2 offset = new Vector2(0, 0);
 
         public GlobalWarmingDenial()
         {
@@ -109,7 +112,7 @@ namespace GLOBALWARMINGDENIAL
 
             if (mouse.LeftButton == ButtonState.Pressed)
             {
-                Tile tile = world.GetTile(mouse.Position.ToVector2() - camera);
+                Tile tile = world.GetTile(mouse.Position.ToVector2() - cameraTranslation);
                 if (tile != null) tile.Dig();
             }
 
@@ -117,9 +120,21 @@ namespace GLOBALWARMINGDENIAL
             player.CollideWithWorld(world);
             world.Update();
 
+            // Move fire
             fire.Update();
+
+            // Move camera to center player
             float centerOfScreen = GraphicsDevice.Viewport.Height / 5;
             camera.Y += (centerOfScreen - camera.Y - player.position.Y) / 10f;
+
+            // Work out how much the camera shakes based on how far it is from the fire
+            int shakeFactor = 1000 - ((int)(fire.position - player.position).Length());
+
+            if (shakeFactor < 0) shakeFactor = 0;
+
+            // Use the shakefactor and a random number to throw some shake into the camera
+            offset = new Vector2((float)rnd.NextDouble() * shakeFactor / 100, (float)rnd.NextDouble() * shakeFactor / 100);
+            cameraTranslation = camera + offset;
             base.Update(gameTime);
         }
 

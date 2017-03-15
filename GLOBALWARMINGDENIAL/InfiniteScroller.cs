@@ -38,12 +38,12 @@ namespace GLOBALWARMINGDENIAL
         public void Draw (SpriteBatch batch)
         {
             // When one of the textures reaches the top of the screen, put it at the bottom
-            if (position1.Y + height + game.camera.Y / factor < 0) position1.Y = position2.Y + height;
-            if (position2.Y + height + game.camera.Y / factor < 0) position2.Y = position1.Y + height;
+            if (position1.Y + height + game.cameraTranslation.Y / factor < 0) position1.Y = position2.Y + height;
+            if (position2.Y + height + game.cameraTranslation.Y / factor < 0) position2.Y = position1.Y + height;
 
             // Render both of the textures
-            batch.Draw(texture, position1 + game.camera / factor, Color.White);
-            batch.Draw(texture, position2 + game.camera / factor, Color.White);
+            batch.Draw(texture, position1 + game.cameraTranslation / factor, Color.White);
+            batch.Draw(texture, position2 + game.cameraTranslation / factor, Color.White);
         }
     }
 }
