@@ -26,6 +26,7 @@ namespace GLOBALWARMINGDENIAL
         public int hull = 100; // goes from 0 - 100
         public int depth = 0;
         public int money = 0;
+        public bool dead = false;
 
         public SpriteFont courier;
         public GraphicsDeviceManager graphics;
@@ -49,6 +50,9 @@ namespace GLOBALWARMINGDENIAL
         public Vector2 cameraTranslation = new Vector2(0, 0);
         public Vector2 offset = new Vector2(0, 0);
 
+        public Texture2D deadBackground;
+        private float deadBackgroundAlpha = 0f;
+
         public GlobalWarmingDenial()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -68,6 +72,7 @@ namespace GLOBALWARMINGDENIAL
 
         protected override void LoadContent()
         {
+            deadBackground = Content.Load<Texture2D>("deadBackground");
             courier = Content.Load<SpriteFont>("Courier");
 
             hud = new HUD(this);
@@ -77,7 +82,6 @@ namespace GLOBALWARMINGDENIAL
             fire = new FireWall(this);
             fire.texture = Content.Load<Texture2D>("fire");
             fire.position.Y = -1000;
-            
 
             background = new InfiniteScroller(this, 0, 2, 720);
             background.texture = Content.Load<Texture2D>("background");
@@ -118,7 +122,6 @@ namespace GLOBALWARMINGDENIAL
             mouse = Mouse.GetState();
             keyboard = Keyboard.GetState();
 
-            if (keyboard.IsKeyDown(Keys.Space)) player.position = new Vector2(100, 20);
             player.HandleInput(mouse, keyboard);
 
             // If mouse is clicked, dig out the specified tile
@@ -133,12 +136,22 @@ namespace GLOBALWARMINGDENIAL
                 }
             }
 
-            player.Update();
-            player.CollideWithWorld(world);
+            // These only happen if we're still alive
+            if (!dead)
+            {
+                player.Update();
+                fire.Update();
+
+                // Set the depth
+                depth = (int)(player.position.Y / 100);
+                player.CollideWithWorld(world);
+            } else
+            {
+                player.position.Y += 20;
+            }
+
             world.Update();
 
-            // Move fire
-            fire.Update();
 
             // Move camera to center player
             float centerOfScreen = GraphicsDevice.Viewport.Height / 5;
@@ -149,12 +162,22 @@ namespace GLOBALWARMINGDENIAL
 
             if (shakeFactor < 0) shakeFactor = 0;
 
+            // If we're close enough to the fire to shake, reduce the hull
+            if (shakeFactor > 400) hull--;
+
             // Use the shakefactor and a random number to throw some shake into the camera
             offset = new Vector2((float)rnd.NextDouble() * shakeFactor / 100, (float)rnd.NextDouble() * shakeFactor / 100);
             cameraTranslation = camera + offset;
 
-            depth = (int)(player.position.Y / 100); // Set the depth
+            if (hull <= 0) Die();
+
             base.Update(gameTime);
+        }
+
+        // Called when the player dies
+        public void Die ()
+        {
+            dead = true;
         }
 
         protected override void Draw(GameTime gameTime)
@@ -164,10 +187,16 @@ namespace GLOBALWARMINGDENIAL
             spriteBatch.Begin();
             background.Draw(spriteBatch);
             world.Draw(spriteBatch);
-            player.Draw(spriteBatch);
+            if (!dead) player.Draw(spriteBatch);
             leftWall.Draw(spriteBatch);
             rightWall.Draw(spriteBatch);
             fire.Draw(spriteBatch);
+
+            if (dead) {
+                deadBackgroundAlpha += 0.01f;
+                spriteBatch.Draw(deadBackground, new Vector2(0, 0), new Color(Color.White, deadBackgroundAlpha));
+            }
+
             hud.Draw(spriteBatch);
             spriteBatch.End();
 

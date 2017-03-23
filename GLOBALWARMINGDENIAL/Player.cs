@@ -60,8 +60,8 @@ namespace GLOBALWARMINGDENIAL
                     if (below != null && below.type == TileType.EMPTY) return;
 
                     moveTarget = new Vector2(tile.position.X + World.TILE_SIZE, tile.position.Y + World.TILE_SIZE / 2);
-                    Digging.timeLeft = diggingDelay / 2;
-                    Digging.moveForce = 2;
+                    Digging.timeLeft = diggingDelay;
+                    Digging.moveForce = 8;
                 }
 
                 if (direction == TileDirection.RIGHT)
@@ -70,8 +70,8 @@ namespace GLOBALWARMINGDENIAL
                     Tile below = currentTile.GetTileInDirection(TileDirection.DOWN);
                     if (below != null && below.type == TileType.EMPTY) return;
                     moveTarget = new Vector2(tile.position.X, tile.position.Y + World.TILE_SIZE / 2);
-                    Digging.timeLeft = diggingDelay / 2;
-                    Digging.moveForce = 2;
+                    Digging.timeLeft = diggingDelay;
+                    Digging.moveForce = 8;
                 }
 
                 // Set up the digging state to begin the digging
