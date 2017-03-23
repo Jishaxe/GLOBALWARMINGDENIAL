@@ -23,6 +23,11 @@ namespace GLOBALWARMINGDENIAL
     /// </summary>
     public class GlobalWarmingDenial : Game
     {
+        public int hull = 100; // goes from 0 - 100
+        public int depth = 0;
+        public int money = 0;
+
+        public SpriteFont courier;
         public GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public Random rnd = new Random();
@@ -33,7 +38,9 @@ namespace GLOBALWARMINGDENIAL
 
         public FireWall fire;
 
-        Player player;
+        public HUD hud;
+
+        public Player player;
         MouseState mouse;
         KeyboardState keyboard;
 
@@ -61,6 +68,12 @@ namespace GLOBALWARMINGDENIAL
 
         protected override void LoadContent()
         {
+            courier = Content.Load<SpriteFont>("Courier");
+
+            hud = new HUD(this);
+            hud.tv = Content.Load<Texture2D>("hud");
+            hud.bar = Content.Load<Texture2D>("bar");
+
             fire = new FireWall(this);
             fire.texture = Content.Load<Texture2D>("fire");
             fire.position.Y = -1000;
@@ -113,7 +126,11 @@ namespace GLOBALWARMINGDENIAL
             if (mouse.LeftButton == ButtonState.Pressed)
             {
                 Tile tile = world.GetTile(mouse.Position.ToVector2() - cameraTranslation);
-                if (tile != null) tile.Dig();
+                if (tile != null)
+                {
+                    tile.Dig();
+                    hull--;
+                }
             }
 
             player.Update();
@@ -135,6 +152,8 @@ namespace GLOBALWARMINGDENIAL
             // Use the shakefactor and a random number to throw some shake into the camera
             offset = new Vector2((float)rnd.NextDouble() * shakeFactor / 100, (float)rnd.NextDouble() * shakeFactor / 100);
             cameraTranslation = camera + offset;
+
+            depth = (int)(player.position.Y / 100); // Set the depth
             base.Update(gameTime);
         }
 
@@ -149,6 +168,7 @@ namespace GLOBALWARMINGDENIAL
             leftWall.Draw(spriteBatch);
             rightWall.Draw(spriteBatch);
             fire.Draw(spriteBatch);
+            hud.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

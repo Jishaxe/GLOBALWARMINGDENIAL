@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GLOBALWARMINGDENIAL
 {
-    class Player: Sprite
+    public class Player: Sprite
     {
         public Rectangle previousHitbox = new Rectangle();
         public DiggingState Digging = new DiggingState();

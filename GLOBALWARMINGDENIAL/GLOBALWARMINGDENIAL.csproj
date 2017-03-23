@@ -62,6 +62,7 @@
     <Compile Include="Background.cs" />
     <Compile Include="FireWall.cs" />
     <Compile Include="Generator.cs" />
+    <Compile Include="HUD.cs" />
     <Compile Include="InfiniteScroller.cs" />
     <Compile Include="DiggingState.cs" />
     <Compile Include="GlobalWarmingDenial.cs" />
