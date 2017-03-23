@@ -58,6 +58,7 @@ namespace GLOBALWARMINGDENIAL
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
+
         protected override void Initialize()
         {
             graphics.PreferredBackBufferWidth = 900;
@@ -68,6 +69,19 @@ namespace GLOBALWARMINGDENIAL
             graphics.ApplyChanges();
             IsMouseVisible = true;
             base.Initialize();
+        }
+
+        public void Reset()
+        {
+            depth = 0;
+            money = 0;
+            fire.position.Y = -1000;
+            deadBackgroundAlpha = 0;
+            hull = 100;
+            dead = false;
+            player.position.Y = 0;
+            world = new World(this);
+            world.Load(Content);
         }
 
         protected override void LoadContent()
@@ -81,7 +95,6 @@ namespace GLOBALWARMINGDENIAL
 
             fire = new FireWall(this);
             fire.texture = Content.Load<Texture2D>("fire");
-            fire.position.Y = -1000;
 
             background = new InfiniteScroller(this, 0, 2, 720);
             background.texture = Content.Load<Texture2D>("background");
@@ -105,6 +118,8 @@ namespace GLOBALWARMINGDENIAL
             player.animations.Play("Drill_Idle");
 
             background.texture = Content.Load<Texture2D>("background");
+
+            Reset();
         }
 
         protected override void UnloadContent()
@@ -123,6 +138,9 @@ namespace GLOBALWARMINGDENIAL
             keyboard = Keyboard.GetState();
 
             player.HandleInput(mouse, keyboard);
+
+            // Reset the game if we are dead and you hit space
+            if (keyboard.IsKeyDown(Keys.Space) && dead) Reset();
 
             // If mouse is clicked, dig out the specified tile
 
