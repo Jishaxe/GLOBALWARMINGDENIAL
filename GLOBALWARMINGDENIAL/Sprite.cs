@@ -13,7 +13,7 @@ namespace GLOBALWARMINGDENIAL
     {
         public Vector2 position = new Vector2();
         public Vector2 velocity;
-        public float drag = 0.8f;
+        public Vector2 drag = new Vector2(0.5f, 0.99f);
         public GlobalWarmingDenial game;
         public Texture2D texture;
         public AnimationManager animations;

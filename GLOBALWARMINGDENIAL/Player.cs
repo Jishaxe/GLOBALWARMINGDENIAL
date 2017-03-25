@@ -30,18 +30,18 @@ namespace GLOBALWARMINGDENIAL
         // Makes the player dig in a direction
         public void DigInDirection(TileDirection direction)
         {
-            if (Digging.IsDigging) return; // Cancel if already digging
+            //if (Digging.IsDigging) return; // Cancel if already digging
 
             Tile currentTile = game.world.GetTile(position);
 
-            if (currentTile == null) return; // Cancel if there is no tile for the player
+            //if (currentTile == null) return; // Cancel if there is no tile for the player
 
             Tile tile = currentTile.GetTileInDirection(direction);
 
-            if (tile == null) return; // Cancel if there is no tile below
+            //if (tile == null) return; // Cancel if there is no tile below
 
             // Only dig if there is not a dug tile already
-            if (tile.type == TileType.DIRT)
+            if (tile != null && tile.type == TileType.DIRT)
             {
                 // This is where the player will try to move to when it is digging
                 Vector2 moveTarget = new Vector2();
@@ -79,13 +79,14 @@ namespace GLOBALWARMINGDENIAL
                 Digging.IsDigging = true;
                 Digging.diggingTarget = tile;
                 Digging.moveTarget = moveTarget;
+               // tile.Dig();
             }
-            else if (direction == TileDirection.LEFT) velocity.X -= 3f; // Instead move left and right if there are no tiles on those sides
-            else if (direction == TileDirection.RIGHT) velocity.X += 3f;
+            else if (direction == TileDirection.LEFT) velocity.X -= 1f; // Instead move left and right if there are no tiles on those sides
+            else if (direction == TileDirection.RIGHT) velocity.X += 1f;
         }
 
         public override void Update ()
-        { 
+        { /*
             // Make it dig
             if (Digging.IsDigging)
             {
@@ -104,10 +105,10 @@ namespace GLOBALWARMINGDENIAL
                     Digging.diggingTarget.Dig();
                     this.animations.Play("Drill_Idle");
                 }
-            } else
+            } else*/
             {
                 // Only apply gravity when not digging
-                velocity.Y += 1.1f;
+                velocity.Y += 0.3f;
             }
 
             // Bound the player within the walls
@@ -125,7 +126,7 @@ namespace GLOBALWARMINGDENIAL
             Vector2 center = new Vector2(position.X + texture.Width / 2, position.Y + texture.Height / 2);
 
             // Get the tiles surrounding the player (tiles that could collide)
-            List<Tile> surroundingTiles = world.GetTilesAround(center, texture.Width + 200);
+            List<Tile> surroundingTiles = world.tiles;
             
             // Make two rectangles we can use to test intersection
             Rectangle playerHb = this.GetHitbox();
@@ -145,7 +146,8 @@ namespace GLOBALWARMINGDENIAL
                    
                     if (previousHitbox.Bottom <= tileHb.Top + 1) // Hit from top
                     {
-                        position.Y -= velocity.Y / 10;
+                        position.Y -= velocity.Y * 1.01f;
+                        velocity.Y = 0;
                     } else if (previousHitbox.Left >= tileHb.Right) // Hit from the right
                     {
                         position.X -= velocity.X / 10;
@@ -154,13 +156,14 @@ namespace GLOBALWARMINGDENIAL
                         position.X -= velocity.X / 10;
                     } else if (previousHitbox.Top >= tileHb.Bottom) // Hit from the bottom
                     {
-                        position.Y -= velocity.Y / 10;
+                        position.Y -= velocity.Y;
+                        velocity.Y = 0;
                     }
                 }
             }
 
             // Keep track of this hitbox for the next frame
-            previousHitbox = playerHb;
+            previousHitbox = this.GetHitbox();
         }
     }
 }

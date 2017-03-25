@@ -150,7 +150,6 @@ namespace GLOBALWARMINGDENIAL
                 if (tile != null)
                 {
                     tile.Dig();
-                    hull--;
                 }
             }
 
@@ -158,7 +157,7 @@ namespace GLOBALWARMINGDENIAL
             if (!dead)
             {
                 player.Update();
-                fire.Update();
+                //fire.Update();
 
                 // Set the depth
                 depth = (int)(player.position.Y / 100);
@@ -215,7 +214,7 @@ namespace GLOBALWARMINGDENIAL
                 spriteBatch.Draw(deadBackground, new Vector2(0, 0), new Color(Color.White, deadBackgroundAlpha));
             }
 
-            hud.Draw(spriteBatch);
+           // hud.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
