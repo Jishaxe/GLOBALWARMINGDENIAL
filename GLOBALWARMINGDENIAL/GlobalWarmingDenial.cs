@@ -15,6 +15,9 @@ using System;
  * 
  * Player can sit directly in the middle of a block and not move down
  * Solved by: Increasing the intensity of the attraction to the tile when digging
+ * 
+ * Player sometimes phases through tiles when tiles have been removed around it
+ * Solved by: Checking all tiles in world instead of just close ones
  */
 namespace GLOBALWARMINGDENIAL
 {

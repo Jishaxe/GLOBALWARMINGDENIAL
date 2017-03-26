@@ -39,7 +39,7 @@ namespace GLOBALWARMINGDENIAL
             Tile tile = currentTile.GetTileInDirection(direction);
 
             //if (tile == null) return; // Cancel if there is no tile below
-
+            /*
             // Only dig if there is not a dug tile already
             if (tile != null && tile.type == TileType.DIRT)
             {
@@ -80,9 +80,9 @@ namespace GLOBALWARMINGDENIAL
                 Digging.diggingTarget = tile;
                 Digging.moveTarget = moveTarget;
                // tile.Dig();
-            }
-            else if (direction == TileDirection.LEFT) velocity.X -= 1f; // Instead move left and right if there are no tiles on those sides
-            else if (direction == TileDirection.RIGHT) velocity.X += 1f;
+            }*/
+            if (direction == TileDirection.LEFT) velocity.X -= 1.5f; // Instead move left and right if there are no tiles on those sides
+            if (direction == TileDirection.RIGHT) velocity.X += 1.5f;
         }
 
         public override void Update ()
@@ -108,7 +108,7 @@ namespace GLOBALWARMINGDENIAL
             } else*/
             {
                 // Only apply gravity when not digging
-                velocity.Y += 0.3f;
+                velocity.Y += 1.1f;
             }
 
             // Bound the player within the walls
@@ -127,7 +127,7 @@ namespace GLOBALWARMINGDENIAL
 
             // Get the tiles surrounding the player (tiles that could collide)
             List<Tile> surroundingTiles = world.tiles;
-            
+
             // Make two rectangles we can use to test intersection
             Rectangle playerHb = this.GetHitbox();
 
@@ -156,14 +156,18 @@ namespace GLOBALWARMINGDENIAL
                         position.X -= velocity.X / 10;
                     } else if (previousHitbox.Top >= tileHb.Bottom) // Hit from the bottom
                     {
-                        position.Y -= velocity.Y;
-                        velocity.Y = 0;
+                        position.Y -= velocity.Y / 10;
                     }
                 }
             }
 
             // Keep track of this hitbox for the next frame
-            previousHitbox = this.GetHitbox();
+            previousHitbox = playerHb;
+        }
+
+        public Rectangle GetHitbox()
+        {
+            return new Rectangle((int)position.X, (int)position.Y + 10, 50, 50);
         }
     }
 }
