@@ -165,7 +165,7 @@ namespace GLOBALWARMINGDENIAL
             previousHitbox = playerHb;
         }
 
-        public Rectangle GetHitbox()
+        public override Rectangle GetHitbox()
         {
             return new Rectangle((int)position.X, (int)position.Y + 10, 50, 50);
         }
