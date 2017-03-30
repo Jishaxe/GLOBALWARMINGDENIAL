@@ -36,13 +36,29 @@ namespace GLOBALWARMINGDENIAL
             }
         }
 
+        public void DrawHitbox(SpriteBatch batch)
+        {
+            Color[] pixel = new Color[1];
+            pixel[0] = Color.White;
+            Texture2D tex = new Texture2D(game.graphics.GraphicsDevice, 1, 1);
+            tex.SetData(pixel);
+
+
+            Rectangle hitbox = this.GetHitbox();
+
+            batch.Draw(tex, new Rectangle(hitbox.Top, hitbox.Left, hitbox.Width, 1), Color.White);
+            batch.Draw(tex, new Rectangle(hitbox.Top, hitbox.Right, 1, hitbox.Height), Color.White);
+            batch.Draw(tex, new Rectangle(hitbox.Bottom, hitbox.Left, hitbox.Width, 1), Color.White);
+            batch.Draw(tex, new Rectangle(hitbox.Top, hitbox.Left, 1, hitbox.Height), Color.White);
+        }
+
         public Vector2 GetCenter()
         {
             return new Vector2(position.X + texture.Width / 2, position.Y + texture.Height / 2);
         }
 
         // Produce a hitbox of this player
-        public Rectangle GetHitbox()
+        public virtual Rectangle GetHitbox()
         {
             return new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
         }
