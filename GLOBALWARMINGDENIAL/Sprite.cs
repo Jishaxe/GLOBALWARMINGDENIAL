@@ -38,18 +38,24 @@ namespace GLOBALWARMINGDENIAL
 
         public void DrawHitbox(SpriteBatch batch)
         {
+            this.DrawHitbox(batch, this.GetHitbox());
+        }
+
+        public void DrawHitbox(SpriteBatch batch, Rectangle hitbox)
+        {
             Color[] pixel = new Color[1];
             pixel[0] = Color.White;
             Texture2D tex = new Texture2D(game.graphics.GraphicsDevice, 1, 1);
             tex.SetData(pixel);
 
 
-            Rectangle hitbox = this.GetHitbox();
+            hitbox.X += (int)game.camera.X;
+            hitbox.Y += (int)game.camera.Y;
 
-            batch.Draw(tex, new Rectangle(hitbox.Top, hitbox.Left, hitbox.Width, 1), Color.White);
-            batch.Draw(tex, new Rectangle(hitbox.Top, hitbox.Right, 1, hitbox.Height), Color.White);
-            batch.Draw(tex, new Rectangle(hitbox.Bottom, hitbox.Left, hitbox.Width, 1), Color.White);
-            batch.Draw(tex, new Rectangle(hitbox.Top, hitbox.Left, 1, hitbox.Height), Color.White);
+            batch.Draw(tex, new Rectangle(hitbox.X, hitbox.Y, hitbox.Width, 1), Color.White);
+            batch.Draw(tex, new Rectangle(hitbox.X + hitbox.Width, hitbox.Y, 1, hitbox.Height), Color.White);
+            batch.Draw(tex, new Rectangle(hitbox.X, hitbox.Y + hitbox.Height, hitbox.Width, 1), Color.White);
+            batch.Draw(tex, new Rectangle(hitbox.X, hitbox.Y, 1, hitbox.Height), Color.White);
         }
 
         public Vector2 GetCenter()

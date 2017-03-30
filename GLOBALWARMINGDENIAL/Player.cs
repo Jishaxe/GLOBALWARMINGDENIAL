@@ -145,7 +145,7 @@ namespace GLOBALWARMINGDENIAL
                 Rectangle tileHb = new Rectangle((int)potentialCollision.position.X, (int)potentialCollision.position.Y, World.TILE_SIZE, World.TILE_SIZE);
 
                 // If we are intersecting with this tile, push the player back out
-                while (playerHb.Intersects(tileHb) && attempts < 10000)
+                while (playerHb.Intersects(tileHb) && attempts < 100)
                 {
                     attempts++;
 
@@ -183,7 +183,7 @@ namespace GLOBALWARMINGDENIAL
 
         public override Rectangle GetHitbox()
         {
-            return new Rectangle((int)position.X, (int)position.Y + 10, 50, 50);
+            return new Rectangle((int)position.X, (int)position.Y, 50, 60);
         }
     }
 }

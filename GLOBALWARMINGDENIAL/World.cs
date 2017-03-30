@@ -171,6 +171,8 @@ namespace GLOBALWARMINGDENIAL
                 if (tile.type == TileType.DIRT) tex = tileTextures["dirt"];
 
                 batch.Draw(tex, tile.position + game.cameraTranslation, tile.color);
+
+               // if (tile.type != TileType.EMPTY) tile.DrawHitbox(batch, new Rectangle((int)tile.position.X, (int)tile.position.Y, World.TILE_SIZE, World.TILE_SIZE));
             }
         }
     }
