@@ -12,8 +12,6 @@ namespace GLOBALWARMINGDENIAL
     public class Player: Sprite
     {
         public Rectangle previousHitbox = new Rectangle();
-        public DiggingState Digging = new DiggingState();
-        public int diggingDelay = 8;
 
         public Player(GlobalWarmingDenial game) : base(game)
         {
@@ -24,23 +22,20 @@ namespace GLOBALWARMINGDENIAL
             if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.Left)) DigInDirection(TileDirection.LEFT);
             else if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right)) DigInDirection(TileDirection.RIGHT);
             else if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down)) DigInDirection(TileDirection.DOWN);
-            //else if (keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.Up)) velocity.Y -= 4f;
         }
 
         // Makes the player dig in a direction
         public void DigInDirection(TileDirection direction)
         {
-            //if (Digging.IsDigging) return; // Cancel if already digging
-
             Tile currentTile = game.world.GetTile(position);
-
-            //if (currentTile == null) return; // Cancel if there is no tile for the player
 
             Tile tile = currentTile.GetTileInDirection(direction);
 
             if (tile != null)
             {
                 tile.Dig();
+
+                // Position the player above the just digged block
                 if (direction == TileDirection.DOWN) position.X = tile.position.X + (World.TILE_SIZE / 2) - previousHitbox.Width / 2;
             }
 
@@ -50,30 +45,9 @@ namespace GLOBALWARMINGDENIAL
         }
 
         public override void Update ()
-        { /*
-            // Make it dig
-            if (Digging.IsDigging)
-            {
-                this.animations.Play("Drill_Dig");
-                // Reduce the time left on this dig
-                Digging.timeLeft--;
-
-                // Move the player to the center of the target
-                Vector2 moveBy = (this.GetCenter() - Digging.moveTarget) / Digging.moveForce;
-                velocity -= moveBy;
-
-                if (Digging.timeLeft == 0)
-                {
-                    // Digging has finished
-                    Digging.IsDigging = false;
-                    Digging.diggingTarget.Dig();
-                    this.animations.Play("Drill_Idle");
-                }
-            } else*/
-            {
-                // Only apply gravity when not digging
-                if (!isOnGround()) velocity.Y += 1.1f;
-            }
+        { 
+            // Only apply gravity when on the ground
+            if (!isOnGround()) velocity.Y += 1.1f;
 
             // Bound the player within the walls
             if (position.Y <= 0) position.Y = 0;
@@ -92,8 +66,6 @@ namespace GLOBALWARMINGDENIAL
         // Collide the player with the tiles in the world
         public void CollideWithWorld (World world)
         {
-            if (Digging.IsDigging) return; // If we're digging, don't do collision
-
             Vector2 center = new Vector2(position.X + texture.Width / 2, position.Y + texture.Height / 2);
 
             // Get the tiles surrounding the player (tiles that could collide)
