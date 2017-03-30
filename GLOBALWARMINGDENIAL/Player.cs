@@ -38,51 +38,15 @@ namespace GLOBALWARMINGDENIAL
 
             Tile tile = currentTile.GetTileInDirection(direction);
 
-            //if (tile == null) return; // Cancel if there is no tile below
-            /*
-            // Only dig if there is not a dug tile already
-            if (tile != null && tile.type == TileType.DIRT)
+            if (tile != null)
             {
-                // This is where the player will try to move to when it is digging
-                Vector2 moveTarget = new Vector2();
+                tile.Dig();
+                if (direction == TileDirection.DOWN) position.X = tile.position.X + (World.TILE_SIZE / 2) - previousHitbox.Width / 2;
+            }
 
-                if (direction == TileDirection.DOWN)
-                {
-                    moveTarget = new Vector2(tile.position.X + World.TILE_SIZE / 2, tile.position.Y);
-                    Digging.timeLeft = diggingDelay;
-                    Digging.moveForce = 10;
-                }
-
-                if (direction == TileDirection.LEFT)
-                {
-                    // If there is an empty tile below, can't move left
-                    Tile below = currentTile.GetTileInDirection(TileDirection.DOWN);
-                    if (below != null && below.type == TileType.EMPTY) return;
-
-                    moveTarget = new Vector2(tile.position.X + World.TILE_SIZE, tile.position.Y + World.TILE_SIZE / 2);
-                    Digging.timeLeft = diggingDelay;
-                    Digging.moveForce = 8;
-                }
-
-                if (direction == TileDirection.RIGHT)
-                {
-                    // If there is an empty tile below, can't move right
-                    Tile below = currentTile.GetTileInDirection(TileDirection.DOWN);
-                    if (below != null && below.type == TileType.EMPTY) return;
-                    moveTarget = new Vector2(tile.position.X, tile.position.Y + World.TILE_SIZE / 2);
-                    Digging.timeLeft = diggingDelay;
-                    Digging.moveForce = 8;
-                }
-
-                // Set up the digging state to begin the digging
-
-                Digging.IsDigging = true;
-                Digging.diggingTarget = tile;
-                Digging.moveTarget = moveTarget;
-               // tile.Dig();
-            }*/
-            if (direction == TileDirection.LEFT) velocity.X -= 1.5f; // Instead move left and right if there are no tiles on those sides
-            if (direction == TileDirection.RIGHT) velocity.X += 1.5f;
+            if (direction == TileDirection.DOWN) velocity.Y += 1f;
+            if (direction == TileDirection.LEFT) velocity.X -= 3f; // Instead move left and right if there are no tiles on those sides
+            if (direction == TileDirection.RIGHT) velocity.X += 3f;
         }
 
         public override void Update ()
