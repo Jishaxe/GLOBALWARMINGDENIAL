@@ -108,7 +108,7 @@ namespace GLOBALWARMINGDENIAL
             } else*/
             {
                 // Only apply gravity when not digging
-                velocity.Y += 1.1f;
+                if (!isOnGround()) velocity.Y += 1.1f;
             }
 
             // Bound the player within the walls
@@ -116,6 +116,13 @@ namespace GLOBALWARMINGDENIAL
             if (position.X < 80) position.X = 80;
             if (position.X + texture.Width > game.GraphicsDevice.Viewport.Width - 80) position.X = game.GraphicsDevice.Viewport.Width - texture.Width - 80;
             base.Update();
+        }
+
+        public bool isOnGround()
+        {
+            Rectangle playerHb = this.GetHitbox();
+            Tile tile = game.world.GetTile(new Vector2(position.X + playerHb.Width / 2, position.Y + playerHb.Height + 5));
+            return tile != null && tile.type != TileType.EMPTY;
         }
 
         // Collide the player with the tiles in the world
@@ -138,25 +145,34 @@ namespace GLOBALWARMINGDENIAL
                 Rectangle tileHb = new Rectangle((int)potentialCollision.position.X, (int)potentialCollision.position.Y, World.TILE_SIZE, World.TILE_SIZE);
 
                 // If we are intersecting with this tile, push the player back out
-                while (playerHb.Intersects(tileHb) && attempts < 100)
+                while (playerHb.Intersects(tileHb) && attempts < 10000)
                 {
                     attempts++;
 
                     playerHb = this.GetHitbox();
-                   
+
                     if (previousHitbox.Bottom <= tileHb.Top + 1) // Hit from top
                     {
-                        position.Y -= velocity.Y * 1.01f;
+                        position.Y = tileHb.Y - playerHb.Height;
                         velocity.Y = 0;
-                    } else if (previousHitbox.Left >= tileHb.Right) // Hit from the right
+                    }
+
+                    if (previousHitbox.Left >= tileHb.Right) // Hit from the right
                     {
-                        position.X -= velocity.X / 10;
-                    } else if (previousHitbox.Right <= tileHb.Left) // Hit from the left
+                        position.X = tileHb.X + tileHb.Width;
+                        velocity.X = 0;
+                    }
+
+                    if (previousHitbox.Right <= tileHb.Left) // Hit from the left
                     {
-                        position.X -= velocity.X / 10;
-                    } else if (previousHitbox.Top >= tileHb.Bottom) // Hit from the bottom
+                        position.X = tileHb.X - playerHb.Width;
+                        velocity.X = 0;
+                    }
+
+                    if (previousHitbox.Top >= tileHb.Bottom) // Hit from the bottom
                     {
-                        position.Y -= velocity.Y / 10;
+                        position.Y = tileHb.Y + tileHb.Height;
+                        velocity.Y = 0;
                     }
                 }
             }
