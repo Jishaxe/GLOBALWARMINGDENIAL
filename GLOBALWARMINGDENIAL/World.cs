@@ -16,7 +16,7 @@ namespace GLOBALWARMINGDENIAL
 
     public enum TileType
     {
-        EMPTY, DIRT, ROCK
+        EMPTY, DIRT, ROCK, GOLD, COPPER, CERAMIC
     }
 
     public class World
@@ -48,6 +48,9 @@ namespace GLOBALWARMINGDENIAL
                 tileTextures.Add(name, tex);
             };
 
+            LoadTileTexture("ceramic");
+            LoadTileTexture("copper");
+            LoadTileTexture("gold");
             LoadTileTexture("dirt");
             LoadTileTexture("dirtn");
             LoadTileTexture("dirtnw");
@@ -169,6 +172,9 @@ namespace GLOBALWARMINGDENIAL
                 if (tile.type == TileType.EMPTY) tex = tileTextures["dirt" + tile.GetTextureSuffix()];
                 if (tile.type == TileType.ROCK) tex = tileTextures["rock"];
                 if (tile.type == TileType.DIRT) tex = tileTextures["dirt"];
+                if (tile.type == TileType.GOLD) tex = tileTextures["gold"];
+                if (tile.type == TileType.COPPER) tex = tileTextures["copper"];
+                if (tile.type == TileType.CERAMIC) tex = tileTextures["ceramic"];
 
                 batch.Draw(tex, tile.position + game.cameraTranslation, tile.color);
 

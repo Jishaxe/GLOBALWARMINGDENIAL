@@ -5,7 +5,7 @@ using System;
 
 /* ISSUES
  * Getting collisions working
- * Solved by: switching to a hybrid collision technique
+ * Solved by: Switching to a hybrid collision technique
  * 
  * Getting stuck on a surface when sliding along it
  * Solved by: Replacing the ifs with else if because it was only checking to see if it was to the left
@@ -18,6 +18,11 @@ using System;
  * 
  * Player sometimes phases through tiles when tiles have been removed around it
  * Solved by: Checking all tiles in world instead of just close ones
+ * 
+ * Movement is too jagged and hard to control
+ * Solved by: Removing delays when digging blocks
+ * 
+ * 
  */
 namespace GLOBALWARMINGDENIAL
 {
