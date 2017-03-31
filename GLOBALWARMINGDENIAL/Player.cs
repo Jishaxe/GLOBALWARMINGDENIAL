@@ -27,21 +27,20 @@ namespace GLOBALWARMINGDENIAL
         // Makes the player dig in a direction
         public void DigInDirection(TileDirection direction)
         {
-            Tile currentTile = game.world.GetTile(position);
+            Tile currentTile = game.world.GetTile(previousHitbox.Center.ToVector2());
+            Tile tile;
 
-            Tile tile = currentTile.GetTileInDirection(direction);
-
-            if (tile != null)
+            if (currentTile != null && (tile = currentTile.GetTileInDirection(direction)) != null)
             {
-                tile.Dig();
+                if (tile.type == TileType.DIRT) tile.Dig();
 
                 // Position the player above the just digged block
                 if (direction == TileDirection.DOWN) position.X = tile.position.X + (World.TILE_SIZE / 2) - previousHitbox.Width / 2;
             }
 
-            if (direction == TileDirection.DOWN) velocity.Y += 1f;
-            if (direction == TileDirection.LEFT) velocity.X -= 3f; // Instead move left and right if there are no tiles on those sides
-            if (direction == TileDirection.RIGHT) velocity.X += 3f;
+            //if (direction == TileDirection.DOWN) velocity.Y += 1f;
+            if (direction == TileDirection.LEFT) velocity.X -= 5f; // Instead move left and right if there are no tiles on those sides
+            if (direction == TileDirection.RIGHT) velocity.X += 5f;
         }
 
         public override void Update ()
