@@ -60,11 +60,13 @@
     <Compile Include="Animation.cs" />
     <Compile Include="AnimationManager.cs" />
     <Compile Include="Background.cs" />
+    <Compile Include="Effects.cs" />
     <Compile Include="FireWall.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="HUD.cs" />
     <Compile Include="InfiniteScroller.cs" />
     <Compile Include="GlobalWarmingDenial.cs" />
+    <Compile Include="Particle.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

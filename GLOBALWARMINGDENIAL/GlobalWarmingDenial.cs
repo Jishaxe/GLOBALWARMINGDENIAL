@@ -58,6 +58,8 @@ namespace GLOBALWARMINGDENIAL
         public Vector2 cameraTranslation = new Vector2(0, 0);
         public Vector2 offset = new Vector2(0, 0);
 
+        public Effects effects;
+
         public Texture2D deadBackground;
         private float deadBackgroundAlpha = 0f;
 
@@ -94,6 +96,10 @@ namespace GLOBALWARMINGDENIAL
 
         protected override void LoadContent()
         {
+            effects = new Effects(this);
+            effects.dirtParticles = Content.Load<Texture2D>("particles/dirt");
+            effects.sparkParticles = Content.Load<Texture2D>("particles/sparks");
+
             deadBackground = Content.Load<Texture2D>("deadBackground");
             courier = Content.Load<SpriteFont>("Courier");
 
@@ -165,7 +171,7 @@ namespace GLOBALWARMINGDENIAL
             if (!dead)
             {
                 player.Update();
-                //fire.Update();
+                fire.Update();
 
                 // Set the depth
                 depth = (int)(player.position.Y / 100);
@@ -194,6 +200,8 @@ namespace GLOBALWARMINGDENIAL
             offset = new Vector2((float)rnd.NextDouble() * shakeFactor / 100, (float)rnd.NextDouble() * shakeFactor / 100);
             cameraTranslation = camera + offset;
 
+            effects.Update();
+
             if (hull <= 0) Die();
 
             base.Update(gameTime);
@@ -217,13 +225,14 @@ namespace GLOBALWARMINGDENIAL
             leftWall.Draw(spriteBatch);
             rightWall.Draw(spriteBatch);
             fire.Draw(spriteBatch);
+            effects.Draw(spriteBatch);
 
             if (dead) {
                 deadBackgroundAlpha += 0.01f;
                 spriteBatch.Draw(deadBackground, new Vector2(0, 0), new Color(Color.White, deadBackgroundAlpha));
             }
 
-           // hud.Draw(spriteBatch);
+            hud.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

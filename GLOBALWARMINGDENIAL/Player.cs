@@ -32,7 +32,14 @@ namespace GLOBALWARMINGDENIAL
 
             if (currentTile != null && (tile = currentTile.GetTileInDirection(direction)) != null)
             {
-                if (tile.type == TileType.DIRT) tile.Dig();
+                if (tile.type == TileType.DIRT)
+                {
+                    tile.Dig();
+                    Vector2 digPosition = new Vector2(0, 0);
+                    if (direction == TileDirection.DOWN) digPosition = previousHitbox.Center.ToVector2() + new Vector2(0, previousHitbox.Height);
+                    game.effects.MakeTileDigEffect(digPosition, ParticleType.DIRT);
+                    //game.effects.MakeTileDigEffect(digPosition, ParticleType.SPARKS);
+                }
 
                 // Position the player above the just digged block
                 if (direction == TileDirection.DOWN) position.X = tile.position.X + (World.TILE_SIZE / 2) - previousHitbox.Width / 2;
