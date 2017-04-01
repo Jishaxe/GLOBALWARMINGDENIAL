@@ -12,6 +12,8 @@ namespace GLOBALWARMINGDENIAL
     public class Player: Sprite
     {
         public Rectangle previousHitbox = new Rectangle();
+        public bool facingLeft = false;
+        public bool facingRight = false;
 
         public Player(GlobalWarmingDenial game) : base(game)
         {
@@ -19,9 +21,19 @@ namespace GLOBALWARMINGDENIAL
 
         public void HandleInput(MouseState mouse, KeyboardState keyboard)
         {
-            if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.Left)) DigInDirection(TileDirection.LEFT);
-            else if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right)) DigInDirection(TileDirection.RIGHT);
-            else if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down)) DigInDirection(TileDirection.DOWN);
+            if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.Left))
+            {
+
+                DigInDirection(TileDirection.LEFT);
+            }
+            else if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right))
+            {
+                DigInDirection(TileDirection.RIGHT);
+            }
+            else if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down))
+            {
+                DigInDirection(TileDirection.DOWN);
+            }
         }
 
         // Makes the player dig in a direction
@@ -36,8 +48,11 @@ namespace GLOBALWARMINGDENIAL
                 {
                     tile.Dig();
                     Vector2 digPosition = new Vector2(0, 0);
-                    if (direction == TileDirection.DOWN) digPosition = previousHitbox.Center.ToVector2() + new Vector2(0, previousHitbox.Height);
+                    if (direction == TileDirection.DOWN) digPosition = previousHitbox.Center.ToVector2() + new Vector2(0, previousHitbox.Height / 2);
+                    if (direction == TileDirection.LEFT) digPosition = previousHitbox.Center.ToVector2() + new Vector2(-previousHitbox.Width, 0);
+                    if (direction == TileDirection.RIGHT) digPosition = previousHitbox.Center.ToVector2() + new Vector2(previousHitbox.Width, 0);
                     game.effects.MakeTileDigEffect(digPosition, ParticleType.DIRT);
+                    game.effects.MakeFlash(digPosition);
                     //game.effects.MakeTileDigEffect(digPosition, ParticleType.SPARKS);
                 }
 

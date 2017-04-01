@@ -52,8 +52,15 @@ namespace GLOBALWARMINGDENIAL
                 int brightness = random.Next(150, 256);
                 part.color = new Color(brightness, brightness, brightness);
                 part.velocity = new Vector2(random.Next(-5, 5), random.Next(-5, 5));
+
+                if (random.NextDouble() > 0.9d) part.sticker = true;
                 particles.Add(part);
             }
+        }
+
+        public void MakeFlash(Vector2 position)
+        {
+
         }
 
         public void Update()
@@ -62,10 +69,33 @@ namespace GLOBALWARMINGDENIAL
 
             foreach (Particle particle in particlesCopy)
             {
-                particle.rotation += particle.rotationDirection;
-                particle.velocity.Y += 1.1f;
                 particle.position += particle.velocity;
-                if (particle.position.Y + game.camera.Y > game.graphics.GraphicsDevice.Viewport.Height) particles.Remove(particle);
+                particle.rotation += particle.rotationDirection;
+
+                if (particle.sticker && !particle.stuck)
+                {
+                    particle.surface.Width += 3;
+                    particle.surface.Height += 3;
+                    particle.velocity.Y += 0.1f;
+
+                    if (particle.surface.Width > 120)
+                    {
+                        particle.stuck = true;
+                        particle.position += game.camera;
+                    }
+                } else if (particle.stuck)
+                {
+                    particle.velocity.Y += 0.1f;
+                    particle.velocity.X = 0;
+                    particle.rotationDirection = 0;
+                    if (particle.position.Y > game.graphics.GraphicsDevice.Viewport.Height) particles.Remove(particle);
+                } else
+                {
+                    particle.velocity.Y += 1.1f;
+                    if (particle.position.Y + game.camera.Y > game.graphics.GraphicsDevice.Viewport.Height) particles.Remove(particle);
+                }
+
+
             }
         }
 
@@ -74,8 +104,16 @@ namespace GLOBALWARMINGDENIAL
             foreach (Particle particle in particles)
             {
                 Texture2D tex = GetTexture(particle.type);
-                particle.surface.X = (int)(particle.position.X + game.camera.X);
-                particle.surface.Y = (int)(particle.position.Y + game.camera.Y);
+
+                if (!particle.stuck)
+                {
+                    particle.surface.X = (int)(particle.position.X + game.camera.X);
+                    particle.surface.Y = (int)(particle.position.Y + game.camera.Y);
+                } else
+                {
+                    particle.surface.X = (int)particle.position.X;
+                    particle.surface.Y = (int)particle.position.Y;
+                }
 
                 batch.Draw(tex, particle.surface, GetVariation(particle.variation), particle.color, particle.rotation, new Vector2(0, 0), SpriteEffects.None, 1);
             }

@@ -15,6 +15,8 @@ namespace GLOBALWARMINGDENIAL
         public float rotationDirection = 0;
         public Color color = Color.White;
         public Rectangle surface = new Rectangle(0, 0, 0, 0);
+        public bool sticker = false;
+        public bool stuck = false;
         public ParticleType type;
         public int variation;
     }

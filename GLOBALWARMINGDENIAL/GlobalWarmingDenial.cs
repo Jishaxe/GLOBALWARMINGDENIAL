@@ -221,7 +221,6 @@ namespace GLOBALWARMINGDENIAL
             background.Draw(spriteBatch);
             world.Draw(spriteBatch);
             if (!dead) player.Draw(spriteBatch);
-            player.DrawHitbox(spriteBatch);
             leftWall.Draw(spriteBatch);
             rightWall.Draw(spriteBatch);
             fire.Draw(spriteBatch);
