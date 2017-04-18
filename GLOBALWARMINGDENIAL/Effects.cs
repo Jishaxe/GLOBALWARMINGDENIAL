@@ -53,8 +53,13 @@ namespace GLOBALWARMINGDENIAL
             }
         }
 
-        internal void MakeSparkEffect(Vector2 digPosition)
+        public void MakeSparkEffect(Vector2 position)
         {
+            for (int i = 0; i < 10; i++)
+            {
+                Vector2 offset = new Vector2(random.Next(-5, 5), random.Next(-5, 5));
+                particles.Add(factory.MakeSparkParticle(position + offset));
+            }
         }
 
         public void Draw(SpriteBatch batch)

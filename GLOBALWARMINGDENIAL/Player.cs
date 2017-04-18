@@ -60,15 +60,15 @@ namespace GLOBALWARMINGDENIAL
                     switch (tile.type)
                     {
                         case TileType.GOLD:
-                            tile.health -= 20;
+                            tile.health -= 10;
                             game.money += 5;
                             break;
                         case TileType.COPPER:
-                            tile.health -= 10;
+                            tile.health -= 7;
                             game.money += 2;
                             break;
                         case TileType.CERAMIC:
-                            tile.health -= 40;
+                            tile.health -= 10;
                             break;
                         case TileType.ROCK:
                             tile.health -= 5;

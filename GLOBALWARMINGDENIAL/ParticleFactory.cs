@@ -37,7 +37,20 @@ namespace GLOBALWARMINGDENIAL
 
         public SparkParticle MakeSparkParticle(Vector2 position)
         {
-            return null;
+            SparkParticle particle = new SparkParticle();
+
+            particle.position = position;
+
+            particle.sizeRectangle.Width = 1;
+            particle.sizeRectangle.Height = 4;
+
+            particle.color = Color.Yellow;
+            particle.texture = tinyDirtTexture;
+
+            // Choose a random velocity
+            particle.velocity = new Vector2(random.Next(-5, 5), random.Next(-80, -20));
+
+            return particle;
         } 
 
         // Make a chunky dirt particle at the specified position
