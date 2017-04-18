@@ -82,12 +82,13 @@ namespace GLOBALWARMINGDENIAL
             // Center the window on the screen
             this.Window.Position = new Point(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2 - 640, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 2 - 360);
             graphics.ApplyChanges();
-            IsMouseVisible = true;
             base.Initialize();
         }
 
         public void Reset()
         {
+            camera = new Vector2(0, 0);
+            cameraTranslation = new Vector2(0, 0);
             depth = 0;
             money = 0;
             background.Reset();
@@ -164,16 +165,6 @@ namespace GLOBALWARMINGDENIAL
             // Reset the game if we are dead and you hit space
             if (keyboard.IsKeyDown(Keys.Space) && dead) Reset();
 
-            // If mouse is clicked, dig out the specified tile
-
-            if (mouse.LeftButton == ButtonState.Pressed)
-            {
-                Tile tile = world.GetTile(mouse.Position.ToVector2() - cameraTranslation);
-                if (tile != null)
-                {
-                    tile.Dig();
-                }
-            }
 
             // These only happen if we're still alive
             if (!dead)
