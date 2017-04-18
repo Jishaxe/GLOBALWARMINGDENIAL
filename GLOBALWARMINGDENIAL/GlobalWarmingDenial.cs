@@ -23,6 +23,8 @@ using System;
  * Solved by: Removing delays when digging blocks
  * 
  * 
+ * Sparks look like wotsits
+ * Solved by: Orientating them to face their direction of travel
  */
 namespace GLOBALWARMINGDENIAL
 {
@@ -97,8 +99,6 @@ namespace GLOBALWARMINGDENIAL
         protected override void LoadContent()
         {
             effects = new Effects(this);
-            effects.dirtParticles = Content.Load<Texture2D>("particles/dirt");
-            effects.sparkParticles = Content.Load<Texture2D>("particles/sparks");
 
             deadBackground = Content.Load<Texture2D>("deadBackground");
             courier = Content.Load<SpriteFont>("Courier");

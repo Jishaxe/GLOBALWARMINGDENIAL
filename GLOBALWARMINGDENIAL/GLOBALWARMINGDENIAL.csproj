@@ -67,6 +67,7 @@
     <Compile Include="InfiniteScroller.cs" />
     <Compile Include="GlobalWarmingDenial.cs" />
     <Compile Include="Particle.cs" />
+    <Compile Include="ParticleFactory.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

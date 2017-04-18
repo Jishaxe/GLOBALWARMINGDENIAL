@@ -8,94 +8,78 @@ using System.Threading.Tasks;
 
 namespace GLOBALWARMINGDENIAL
 {
-    public enum ParticleType
-    {
-        DIRT, SPARKS
-    }
-
     public class Effects
     {
         public Random random = new Random();
-        const int PARTICLE_SIZE = 16;
         GlobalWarmingDenial game;
-        public Texture2D dirtParticles;
-        public Texture2D sparkParticles;
+
         public List<Particle> particles = new List<Particle>();
+        public ParticleFactory factory = new ParticleFactory();
 
         public Effects(GlobalWarmingDenial game)
         {
             this.game = game;
+            this.factory.LoadParticleTextures(game.GraphicsDevice, game.Content);
         }
 
         /**
          * Make an exploding particle effect for digging
          */
-        public void MakeTileDigEffect(Vector2 position, ParticleType type)
+        public void MakeTileDigEffect(Vector2 position)
         {
-            int burstCount = random.Next(0, 8);
-            for (int i = 0; i < burstCount; i++)
+            for (int i = 0; i < 2; i++)
             {
-                Vector2 positionOffset = new Vector2(random.Next(-5, 5), random.Next(-5, 5));
-
-                Particle part = new Particle();
-                part.position = position + positionOffset;
-                part.type = type;
-
-                part.rotationDirection = ((float)(random.NextDouble() - 1) * 2f) / 20f;
-
-                int scale = random.Next(2, 5);
-                part.surface.Width = PARTICLE_SIZE * scale;
-                part.surface.Height = PARTICLE_SIZE * scale;
-
-                part.variation = random.Next(0, GetVariationCount(type));
-
-                int brightness = random.Next(150, 256);
-                part.color = new Color(brightness, brightness, brightness);
-                part.velocity = new Vector2(random.Next(-5, 5), random.Next(-5, 5));
-
-                if (random.NextDouble() > 0.9d) part.sticker = true;
-                particles.Add(part);
+                Vector2 offset = new Vector2(random.Next(-5, 5), random.Next(-5, 5));
+                particles.Add(factory.MakeChunkDirtParticle(position + offset));
+                particles.Add(factory.MakeTinyDirtParticle(position + offset));
             }
-        }
 
-        public void MakeFlash(Vector2 position)
-        {
-
+            for (int i = 0; i < 70; i++)
+            {
+                Vector2 offset = new Vector2(random.Next(-20, 20), random.Next(-20, 20));
+                particles.Add(factory.MakeTinyDirtParticle(position + offset));
+            }
         }
 
         public void Update()
         {
+            // Make a copy of the list so we don't get enumeration issues
             List<Particle> particlesCopy = new List<Particle>(particles);
 
+            // For every particle we have right now
             foreach (Particle particle in particlesCopy)
             {
+                // Move the particle by the linear velocity, and rotate with the rotation velocity
                 particle.position += particle.velocity;
-                particle.rotation += particle.rotationDirection;
+                particle.rotation += particle.rotationVelocity;
 
+                // A "sticker" particle is one that is destined to be stuck to the screen
                 if (particle.sticker && !particle.stuck)
                 {
-                    particle.surface.Width += 3;
-                    particle.surface.Height += 3;
+                    // If this particle is going to, but is not yet, stuck to the screen, move it closer
+                    particle.sizeRectangle.Width += 2;
+                    particle.sizeRectangle.Height += 2;
                     particle.velocity.Y += 0.1f;
 
-                    if (particle.surface.Width > 120)
+                    // Once this particle has reached the desired size, make it into a sticker
+                    if (particle.sizeRectangle.Width > 120)
                     {
                         particle.stuck = true;
                         particle.position += game.camera;
                     }
                 } else if (particle.stuck)
                 {
+                    // If this particle is stuck to the screen, slowly slide it downwards until it falls off
                     particle.velocity.Y += 0.1f;
                     particle.velocity.X = 0;
-                    particle.rotationDirection = 0;
+                    particle.rotationVelocity = 0;
                     if (particle.position.Y > game.graphics.GraphicsDevice.Viewport.Height) particles.Remove(particle);
                 } else
                 {
+                    // if this is just a normal particle, apply some gravity to it
                     particle.velocity.Y += 1.1f;
                     if (particle.position.Y + game.camera.Y > game.graphics.GraphicsDevice.Viewport.Height) particles.Remove(particle);
                 }
-
-
             }
         }
 
@@ -103,37 +87,8 @@ namespace GLOBALWARMINGDENIAL
         {
             foreach (Particle particle in particles)
             {
-                Texture2D tex = GetTexture(particle.type);
-
-                if (!particle.stuck)
-                {
-                    particle.surface.X = (int)(particle.position.X + game.camera.X);
-                    particle.surface.Y = (int)(particle.position.Y + game.camera.Y);
-                } else
-                {
-                    particle.surface.X = (int)particle.position.X;
-                    particle.surface.Y = (int)particle.position.Y;
-                }
-
-                batch.Draw(tex, particle.surface, GetVariation(particle.variation), particle.color, particle.rotation, new Vector2(0, 0), SpriteEffects.None, 1);
+                particle.Draw(batch, game.camera);
             }
-        }
-
-        public Rectangle GetVariation(int i)
-        {
-            return new Rectangle(PARTICLE_SIZE * i, 0, PARTICLE_SIZE, PARTICLE_SIZE);
-        }
-
-        public Texture2D GetTexture(ParticleType type)
-        {
-            if (type == ParticleType.DIRT) return dirtParticles;
-            if (type == ParticleType.SPARKS) return sparkParticles;
-            return null;
-        }
-
-        public int GetVariationCount(ParticleType type)
-        {
-            return GetTexture(type).Width / PARTICLE_SIZE;
         }
     }
 }
