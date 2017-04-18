@@ -403,3 +403,63 @@
 /processorParam:TextureFormat=Color
 /build:particles/sparks.png
 
+#begin sounds/break1.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/break1.mp3
+
+#begin sounds/break2.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/break2.mp3
+
+#begin sounds/break3.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/break3.mp3
+
+#begin sounds/digdirt1.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/digdirt1.mp3
+
+#begin sounds/digdirt2.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/digdirt2.mp3
+
+#begin sounds/digdirt3.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/digdirt3.mp3
+
+#begin sounds/fire.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/fire.mp3
+
+#begin sounds/metal1.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/metal1.mp3
+
+#begin sounds/metal2.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/metal2.mp3
+
+#begin sounds/metal3.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/metal3.mp3
+

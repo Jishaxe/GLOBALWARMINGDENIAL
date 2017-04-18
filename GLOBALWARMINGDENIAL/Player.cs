@@ -55,6 +55,7 @@ namespace GLOBALWARMINGDENIAL
 
                 if (tile.type == TileType.DIRT)
                 {
+                    game.sounds.PlaySound(Sounds.SoundType.DIRT_DIG);
                     tile.Dig();
                     game.effects.MakeTileDigEffect(digPosition);
                 } else if (tile.type != TileType.EMPTY)
@@ -79,7 +80,13 @@ namespace GLOBALWARMINGDENIAL
                             break;
                     }
 
-                    if (tile.health <= 0) tile.Dig();
+                    game.sounds.PlaySound(Sounds.SoundType.METAL_DIG);
+
+                    if (tile.health <= 0)
+                    {
+                        game.sounds.PlaySound(Sounds.SoundType.TILE_BREAKING);
+                        tile.Dig();
+                    }
                 }
 
                 // Position the player above the just digged block

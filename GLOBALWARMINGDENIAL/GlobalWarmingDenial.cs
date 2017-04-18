@@ -64,6 +64,7 @@ namespace GLOBALWARMINGDENIAL
         public Vector2 offset = new Vector2(0, 0);
 
         public Effects effects;
+        public Sounds sounds;
 
         public Texture2D deadBackground;
         private float deadBackgroundAlpha = 0f;
@@ -85,11 +86,12 @@ namespace GLOBALWARMINGDENIAL
             base.Initialize();
         }
 
+        // Read money from a simple txt file in the CWD
         public int loadMoney()
         {
             if (File.Exists("money.txt"))
             {
-                StreamReader inputFile = new StreamReader("money.txt"); // Read money from a simple txt file in the CWD
+                StreamReader inputFile = new StreamReader("money.txt"); 
                 int money = Convert.ToInt32(inputFile.ReadLine());
                 inputFile.Close();
                 return money;
@@ -99,9 +101,10 @@ namespace GLOBALWARMINGDENIAL
             return 0;
         }
 
+        // Write the money to a simple txt file in the CWD
         public void saveMoney(int money)
         {
-            StreamWriter outputFile = new StreamWriter("money.txt"); // Write the money to a simple txt file in the CWD
+            StreamWriter outputFile = new StreamWriter("money.txt"); 
             outputFile.WriteLine(money);
             outputFile.Close();
         }
@@ -163,6 +166,9 @@ namespace GLOBALWARMINGDENIAL
 
             background.texture = Content.Load<Texture2D>("background");
 
+            sounds = new Sounds();
+            sounds.Load(Content);
+
             Reset();
         }
 
@@ -212,6 +218,9 @@ namespace GLOBALWARMINGDENIAL
             int shakeFactor = 1000 - ((int)(fire.position - player.position).Length());
 
             if (shakeFactor < 0) shakeFactor = 0;
+
+            // Make the fire sound louder depending on the distance of the fire
+            sounds.AdjustFireSoundVolume(shakeFactor / 100f);
 
             // If we're close enough to the fire to shake, reduce the hull
             if (shakeFactor > 100) hull--;
