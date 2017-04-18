@@ -13,6 +13,9 @@ namespace GLOBALWARMINGDENIAL
         public TileType type;
         public World world;
 
+        // The health of this tile
+        public int health = 100; 
+
         // Keeps a track of which direction this tile has been bored into when the type is TileType.EMPTY
         // This will render a sprite with holes in the different directions
         public bool dugNorth = false;

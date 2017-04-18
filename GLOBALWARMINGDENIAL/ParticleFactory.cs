@@ -35,6 +35,11 @@ namespace GLOBALWARMINGDENIAL
             return particle;
         }
 
+        public SparkParticle MakeSparkParticle(Vector2 position)
+        {
+            return null;
+        } 
+
         // Make a chunky dirt particle at the specified position
         public ChunkDirtParticle MakeChunkDirtParticle(Vector2 position)
         {

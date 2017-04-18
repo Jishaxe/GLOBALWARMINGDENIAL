@@ -29,12 +29,6 @@ namespace GLOBALWARMINGDENIAL
         // Which variation of particle this is
         public int variation = 0;
 
-        // If the particle is a "sticker", it will increase in size, stop at a certain size, then slowly drop down attached to the camera
-        // Almost like the chunk of dirt has smacked into the camera
-        // If it is stuck, the particle is currently in a position where it is sliding down the screen.
-        public bool sticker = false;
-        public bool stuck = false;
-
         // The size of each tile in a strip of particle frames
         public int PARTICLE_SIZE = 0;
 
@@ -44,7 +38,75 @@ namespace GLOBALWARMINGDENIAL
             return new Rectangle(PARTICLE_SIZE * variation, 0, PARTICLE_SIZE, PARTICLE_SIZE);
         }
 
-        public void Draw(SpriteBatch batch, Vector2 camera)
+        public virtual void Update(Effects effects)
+        {
+            // Move the particle by the linear velocity, and rotate with the rotation velocity
+            position += velocity;
+            rotation += rotationVelocity;
+            velocity.Y += 1.1f;
+            if (position.Y + effects.game.camera.Y > effects.game.graphics.GraphicsDevice.Viewport.Height) effects.particles.Remove(this);
+        }
+
+        public virtual void Draw(SpriteBatch batch, Vector2 camera)
+        {
+            this.sizeRectangle.X = (int)(this.position.X + camera.X);
+            this.sizeRectangle.Y = (int)(this.position.Y + camera.Y);
+
+            batch.Draw(texture, sizeRectangle, GetSourceRectangle(), color, rotation, new Vector2(0, 0), SpriteEffects.None, 1);
+        }
+    }
+
+    public class ChunkDirtParticle: Particle
+    {
+        // If the particle is a "sticker", it will increase in size, stop at a certain size, then slowly drop down attached to the camera
+        // Almost like the chunk of dirt has smacked into the camera
+        // If it is stuck, the particle is currently in a position where it is sliding down the screen.
+        public bool sticker = false;
+        public bool stuck = false;
+
+        public ChunkDirtParticle()
+        {
+            this.PARTICLE_SIZE = 16;
+        }
+
+        public override void Update(Effects effects)
+        {
+            // Move the particle by the linear velocity, and rotate with the rotation velocity
+            position += velocity;
+            rotation += rotationVelocity;
+
+            // A "sticker" particle is one that is destined to be stuck to the screen
+            if (sticker && !stuck)
+            {
+                // If this particle is going to, but is not yet, stuck to the screen, move it closer
+                sizeRectangle.Width += 2;
+                sizeRectangle.Height += 2;
+                velocity.Y += 0.1f;
+
+                // Once this particle has reached the desired size, make it into a sticker
+                if (sizeRectangle.Width > 120)
+                {
+                    stuck = true;
+                    position += effects.game.camera;
+                }
+            }
+            else if (stuck)
+            {
+                // If this particle is stuck to the screen, slowly slide it downwards until it falls off
+                velocity.Y += 0.1f;
+                velocity.X = 0;
+                rotationVelocity = 0;
+                if (position.Y > effects.game.graphics.GraphicsDevice.Viewport.Height) effects.particles.Remove(this);
+            }
+            else
+            {
+                // if this is just a normal particle, apply some gravity to it
+                velocity.Y += 1.1f;
+                if (position.Y + effects.game.camera.Y > effects.game.graphics.GraphicsDevice.Viewport.Height) effects.particles.Remove(this);
+            }
+        }
+
+        public override void Draw(SpriteBatch batch, Vector2 camera)
         {
             // If this particle is stuck, add the camera position to the destination square
             if (!stuck)
@@ -57,23 +119,22 @@ namespace GLOBALWARMINGDENIAL
                 this.sizeRectangle.X = (int)(this.position.X);
                 this.sizeRectangle.Y = (int)(this.position.Y);
             }
-            Rectangle srcR = GetSourceRectangle();
 
             batch.Draw(texture, sizeRectangle, GetSourceRectangle(), color, rotation, new Vector2(0, 0), SpriteEffects.None, 1);
-        }
-    }
-
-    public class ChunkDirtParticle: Particle
-    {
-        public ChunkDirtParticle()
-        {
-            this.PARTICLE_SIZE = 16;
         }
     }
 
     public class TinyDirtParticle: Particle
     {
         public TinyDirtParticle()
+        {
+            this.PARTICLE_SIZE = 1;
+        }
+    }
+
+    public class SparkParticle: Particle
+    {
+        public SparkParticle()
         {
             this.PARTICLE_SIZE = 1;
         }

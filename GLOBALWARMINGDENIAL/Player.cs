@@ -44,14 +44,38 @@ namespace GLOBALWARMINGDENIAL
 
             if (currentTile != null && (tile = currentTile.GetTileInDirection(direction)) != null)
             {
+                Vector2 digPosition = new Vector2(0, 0);
+                if (direction == TileDirection.DOWN) digPosition = previousHitbox.Center.ToVector2() + new Vector2(0, previousHitbox.Height / 2);
+                if (direction == TileDirection.LEFT) digPosition = previousHitbox.Center.ToVector2() + new Vector2(-previousHitbox.Width, 0);
+                if (direction == TileDirection.RIGHT) digPosition = previousHitbox.Center.ToVector2() + new Vector2(previousHitbox.Width, 0);
+
                 if (tile.type == TileType.DIRT)
                 {
                     tile.Dig();
-                    Vector2 digPosition = new Vector2(0, 0);
-                    if (direction == TileDirection.DOWN) digPosition = previousHitbox.Center.ToVector2() + new Vector2(0, previousHitbox.Height / 2);
-                    if (direction == TileDirection.LEFT) digPosition = previousHitbox.Center.ToVector2() + new Vector2(-previousHitbox.Width, 0);
-                    if (direction == TileDirection.RIGHT) digPosition = previousHitbox.Center.ToVector2() + new Vector2(previousHitbox.Width, 0);
                     game.effects.MakeTileDigEffect(digPosition);
+                } else if (tile.type != TileType.EMPTY)
+                {
+                    game.effects.MakeSparkEffect(digPosition);
+
+                    switch (tile.type)
+                    {
+                        case TileType.GOLD:
+                            tile.health -= 20;
+                            game.money += 5;
+                            break;
+                        case TileType.COPPER:
+                            tile.health -= 10;
+                            game.money += 2;
+                            break;
+                        case TileType.CERAMIC:
+                            tile.health -= 40;
+                            break;
+                        case TileType.ROCK:
+                            tile.health -= 5;
+                            break;
+                    }
+
+                    if (tile.health <= 0) tile.Dig();
                 }
 
                 // Position the player above the just digged block
