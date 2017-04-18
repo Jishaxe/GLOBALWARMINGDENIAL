@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.IO;
 
 /* ISSUES
  * Getting collisions working
@@ -21,7 +22,6 @@ using System;
  * 
  * Movement is too jagged and hard to control
  * Solved by: Removing delays when digging blocks
- * 
  * 
  * Sparks look like wotsits
  * Solved by: Orientating them to face their direction of travel
@@ -85,12 +85,32 @@ namespace GLOBALWARMINGDENIAL
             base.Initialize();
         }
 
+        public int loadMoney()
+        {
+            if (File.Exists("money.txt"))
+            {
+                StreamReader inputFile = new StreamReader("money.txt"); // Read money from a simple txt file in the CWD
+                int money = Convert.ToInt32(inputFile.ReadLine());
+                inputFile.Close();
+                return money;
+            }
+
+            // If there is no money saved, just return 0
+            return 0;
+        }
+
+        public void saveMoney(int money)
+        {
+            StreamWriter outputFile = new StreamWriter("money.txt"); // Write the money to a simple txt file in the CWD
+            outputFile.WriteLine(money);
+            outputFile.Close();
+        }
+
         public void Reset()
         {
             camera = new Vector2(0, 0);
             cameraTranslation = new Vector2(0, 0);
             depth = 0;
-            money = 0;
             background.Reset();
             leftWall.Reset();
             rightWall.Reset();
@@ -102,6 +122,7 @@ namespace GLOBALWARMINGDENIAL
             player.velocity = new Vector2(0, 0);
             player.previousHitbox = player.GetHitbox();
             world = new World(this);
+            money = loadMoney();
             world.Load(Content);
         }
 
@@ -210,6 +231,7 @@ namespace GLOBALWARMINGDENIAL
         public void Die ()
         {
             dead = true;
+            saveMoney(money);
         }
 
         protected override void Draw(GameTime gameTime)
