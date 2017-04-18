@@ -25,6 +25,9 @@ using System;
  * 
  * Sparks look like wotsits
  * Solved by: Orientating them to face their direction of travel
+ * 
+ * When resetting the game, the background and walls would not be positioned correctly
+ * Solved by: Resetting the wall positions
  */
 namespace GLOBALWARMINGDENIAL
 {
@@ -87,11 +90,16 @@ namespace GLOBALWARMINGDENIAL
         {
             depth = 0;
             money = 0;
+            background.Reset();
+            leftWall.Reset();
+            rightWall.Reset();
             fire.position.Y = -1000;
             deadBackgroundAlpha = 0;
             hull = 100;
             dead = false;
             player.position.Y = 0;
+            player.velocity = new Vector2(0, 0);
+            player.previousHitbox = player.GetHitbox();
             world = new World(this);
             world.Load(Content);
         }
@@ -194,7 +202,7 @@ namespace GLOBALWARMINGDENIAL
             if (shakeFactor < 0) shakeFactor = 0;
 
             // If we're close enough to the fire to shake, reduce the hull
-            if (shakeFactor > 400) hull--;
+            if (shakeFactor > 100) hull--;
 
             // Use the shakefactor and a random number to throw some shake into the camera
             offset = new Vector2((float)rnd.NextDouble() * shakeFactor / 100, (float)rnd.NextDouble() * shakeFactor / 100);

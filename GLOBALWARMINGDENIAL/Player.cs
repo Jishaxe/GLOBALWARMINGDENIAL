@@ -14,6 +14,7 @@ namespace GLOBALWARMINGDENIAL
         public Rectangle previousHitbox = new Rectangle();
         public bool facingLeft = false;
         public bool facingRight = false;
+        public bool digging = false;
 
         public Player(GlobalWarmingDenial game) : base(game)
         {
@@ -23,7 +24,6 @@ namespace GLOBALWARMINGDENIAL
         {
             if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.Left))
             {
-
                 DigInDirection(TileDirection.LEFT);
             }
             else if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right))
@@ -33,12 +33,16 @@ namespace GLOBALWARMINGDENIAL
             else if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down))
             {
                 DigInDirection(TileDirection.DOWN);
+            } else
+            {
+                digging = false;
             }
         }
 
         // Makes the player dig in a direction
         public void DigInDirection(TileDirection direction)
         {
+            digging = true;
             Tile currentTile = game.world.GetTile(previousHitbox.Center.ToVector2());
             Tile tile;
 
@@ -88,7 +92,10 @@ namespace GLOBALWARMINGDENIAL
         }
 
         public override void Update ()
-        { 
+        {
+            if (digging) this.animations.Play("Drill_Dig");
+            else this.animations.Play("Drill_Idle");
+
             // Only apply gravity when on the ground
             if (!isOnGround()) velocity.Y += 1.1f;
 

@@ -80,8 +80,9 @@ namespace GLOBALWARMINGDENIAL
 
                 for (int x = 0; x < game.graphics.GraphicsDevice.Viewport.Width; x += TILE_SIZE)
                 {
+                    
                     Tile tile = gen.PickNextTile(this.GetTile(new Vector2(x, y - 50)));
-
+                    tile.dugNorth = true;
                     tile.position = new Vector2(x, y);
                     if (y < 250)
                     {

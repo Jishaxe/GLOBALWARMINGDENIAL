@@ -134,9 +134,19 @@ namespace GLOBALWARMINGDENIAL
 
     public class SparkParticle: Particle
     {
+        public int life = 20;
+
         public SparkParticle()
         {
             this.PARTICLE_SIZE = 1;
+        }
+
+        public override void Update(Effects effects)
+        {
+            base.Update(effects);
+            life--;
+
+            if (life <= 0) effects.particles.Remove(this);
         }
     }
 }

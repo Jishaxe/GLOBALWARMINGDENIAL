@@ -9,7 +9,7 @@
 
         public override void Update()
         {
-            position.Y += 3;
+            position.Y += 5;
             base.Update();
         }
     }

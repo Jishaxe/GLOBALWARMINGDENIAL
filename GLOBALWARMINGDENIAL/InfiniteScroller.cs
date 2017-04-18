@@ -22,14 +22,24 @@ namespace GLOBALWARMINGDENIAL
         // The height of the texture and the x position
         int height;
 
+        // The x position of this scroller
+        int x;
+
         // The parralax factor
         float factor;
+
+        public void Reset()
+        {
+            position1 = new Vector2(x, 0);
+            position2 = new Vector2(x, height);
+        }
 
         public InfiniteScroller(GlobalWarmingDenial game, int x, float factor, int height)
         {
             this.game = game;
             this.height = height;
             this.factor = factor;
+            this.x = x;
 
             position1 = new Vector2(x, 0);
             position2 = new Vector2(x, height);
