@@ -36,38 +36,52 @@ namespace GLOBALWARMINGDENIAL
     /// </summary>
     public class GlobalWarmingDenial : Game
     {
-        public int hull = 100; // goes from 0 - 100
+        // The player stats
+        public int hull = 100;
         public int depth = 0;
         public int money = 0;
         public bool dead = false;
+
+        // When this is at 0, the player will self-heal
+        public int healCooldown = 0;
 
         public SpriteFont courier;
         public GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public Random rnd = new Random();
 
+        // The background, left and right walls
         InfiniteScroller background;
         InfiniteScroller leftWall;
         InfiniteScroller rightWall;
 
+        // The scary fire wall
         public FireWall fire;
+        public int fireCloseness;
 
+        // The UI at the top-left of the screen
         public HUD hud;
 
         public Player player;
+
+        // Current mouse and keyboard state
         MouseState mouse;
         KeyboardState keyboard;
 
         public World world;
         public Vector2 camera = new Vector2(0, 0);
+        
+        // The camera translation is the camera + the randomly generated offset
         public Vector2 cameraTranslation = new Vector2(0, 0);
         public Vector2 offset = new Vector2(0, 0);
 
         public Effects effects;
         public Sounds sounds;
-
+        
+        // This background is rendered when the player dies. deadBackgroundAlpha controls how transparent it is.
         public Texture2D deadBackground;
         private float deadBackgroundAlpha = 0f;
+        public int absoluteFireDistance;
 
         public GlobalWarmingDenial()
         {
@@ -109,6 +123,7 @@ namespace GLOBALWARMINGDENIAL
             outputFile.Close();
         }
 
+        // Reset and set the game back up again.
         public void Reset()
         {
             camera = new Vector2(0, 0);
@@ -129,6 +144,7 @@ namespace GLOBALWARMINGDENIAL
             world.Load(Content);
         }
 
+        // Loads all the elements
         protected override void LoadContent()
         {
             effects = new Effects(this);
@@ -202,6 +218,10 @@ namespace GLOBALWARMINGDENIAL
                 // Set the depth
                 depth = (int)(player.position.Y / 100);
                 player.CollideWithWorld(world);
+
+                if (healCooldown > 0) healCooldown--;
+                // Heal the player if the cooldown is at 0
+                if (healCooldown == 0 && hull < 100) hull++;
             } else
             {
                 player.position.Y += 20;
@@ -210,23 +230,35 @@ namespace GLOBALWARMINGDENIAL
             world.Update();
 
 
+            // Make it so the fire can't get too far away
+            absoluteFireDistance = (int)(fire.position - player.position).Length();
+            if (absoluteFireDistance > 2000)
+            {
+                fire.position.Y = player.position.Y - 1800;
+            }
+
             // Move camera to center player
             float centerOfScreen = GraphicsDevice.Viewport.Height / 5;
             camera.Y += (centerOfScreen - camera.Y - player.position.Y) / 10f;
 
             // Work out how much the camera shakes based on how far it is from the fire
-            int shakeFactor = 1000 - ((int)(fire.position - player.position).Length());
+            fireCloseness = 1000 - ((int)(fire.position - player.position).Length());
 
-            if (shakeFactor < 0) shakeFactor = 0;
+
+            if (fireCloseness < 0) fireCloseness = 0;
 
             // Make the fire sound louder depending on the distance of the fire
-            sounds.AdjustFireSoundVolume(shakeFactor / 100f);
+            sounds.AdjustFireSoundVolume(fireCloseness / 100f);
 
             // If we're close enough to the fire to shake, reduce the hull
-            if (shakeFactor > 100) hull--;
+            if (fireCloseness > 100)
+            {
+                hull--;
+                healCooldown = 100; // Disable healing for 100 updates
+            }
 
             // Use the shakefactor and a random number to throw some shake into the camera
-            offset = new Vector2((float)rnd.NextDouble() * shakeFactor / 100, (float)rnd.NextDouble() * shakeFactor / 100);
+            offset = new Vector2((float)rnd.NextDouble() * fireCloseness / 100, (float)rnd.NextDouble() * fireCloseness / 100);
             cameraTranslation = camera + offset;
 
             effects.Update();
